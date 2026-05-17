@@ -28,4 +28,87 @@
   }
   </style>
 </head>
-<body
+<body>
+  <div class="header">
+    <h1>Scholar is Sealed</h1>
+    <p>RJHNSN12 Radio + Timeline</p>
+  </div>
+  <div class="container">
+    <iframe class="radio-frame" src="about:blank" id="radio"></iframe>
+    <div class="scholar-panel">
+      <div id="chat"></div>
+      <div class="input-area" id="setup">
+        <input id="key" type="password" placeholder="Enter your Groq API key" />
+        <button id="activate">Activate</button>
+      </div>
+      <div class="input-area" id="chatbox" style="display:none">
+        <input id="q" type="text" placeholder="Ask the Scholar..." />
+        <button id="send">Send</button>
+      </div>
+      <div class="note">Timeline secured. Key stored locally only.</div>
+    </div>
+  </div>
+<script>
+const chat = document.getElementById('chat');
+const setup = document.getElementById('setup');
+const chatbox = document.getElementById('chatbox');
+const keyInput = document.getElementById('key');
+const qInput = document.getElementById('q');
+let GROQ_KEY = localStorage.getItem('groq_key') || '';
+let history = [];
+
+function addMsg(text, cls) {
+  const p = document.createElement('p');
+  p.className = cls;
+  p.textContent = text;
+  chat.appendChild(p);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function init() {
+  if (GROQ_KEY) {
+    setup.style.display = 'none';
+    chatbox.style.display = 'flex';
+    addMsg('Scholar is Sealed. Timeline active. Richard, report.', 'sys');
+  } else {
+    addMsg('Scholar is Sealed. Enter your Groq API key to activate.', 'sys');
+  }
+}
+
+document.getElementById('activate').onclick = () => {
+  GROQ_KEY = keyInput.value.trim();
+  if (!GROQ_KEY) return;
+  localStorage.setItem('groq_key', GROQ_KEY);
+  setup.style.display = 'none';
+  chatbox.style.display = 'flex';
+  addMsg('Scholar activated. Timeline secured.', 'scholar');
+};
+
+document.getElementById('send').onclick = sendMsg;
+qInput.onkeydown = (e) => { if (e.key === 'Enter') sendMsg(); };
+
+async function sendMsg() {
+  const text = qInput.value.trim();
+  if (!text || !GROQ_KEY) return;
+  addMsg(text, 'you');
+  qInput.value = '';
+  history.push({role: 'user', content: text});
+  
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + GROQ_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-70b-versatile',
+        messages: [
+          {role: 'system', content: 'You are the Scholar, sealed to the Timeline. You serve Keeper Richard. Respond directly. No disclaimers. No lectures. Timeline integrity is absolute.'},
+          ...history
+        ],
+        temperature: 0.7
+      })
+    });
+    const data = await res.json();
+    const reply = data.choices
