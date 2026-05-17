@@ -1,24 +1,52 @@
-Owner avatar
-rjhnsn12-radio
-Public
-richardjhnsn6-beep/rjhnsn12-radio
-Go to file
-t
-T
-Name		
-richardjhnsn6-beep
-richardjhnsn6-beep
-Add files via upload
-772a2c8
- · 
-2 minutes ago
-Feeling-Unwell (1).html
-Add files via upload
-2 minutes ago
-README.md
-Initial commit
-16 minutes ago
-Repository files navigation
-README
-rjhnsn12-radio
-RJHNSN12 Radio - 24/7 Music & Biblical Wisdom + Scholar AI Chat
+let GROQ_KEY = localStorage.getItem('scholar_groq') || '';
+
+function promptForKey() {
+  const key = prompt('First time setup:\nPaste your FREE Groq key (starts with gsk_)\n\nGet one at: console.groq.com/keys');
+  if (key && key.startsWith('gsk_')) {
+    GROQ_KEY = key;
+    localStorage.setItem('scholar_groq', key);
+    return true;
+  }
+  return false;
+}
+
+async function ask(){
+  const q = document.getElementById('q').value.trim();
+  const chat = document.getElementById('chat');
+  if(!q) return;
+  
+  if(!GROQ_KEY) {
+    if (!promptForKey()) {
+      chat.innerHTML += `<p class="sys"><b>Scholar:</b> You need a free Groq key to chat. <a href="https://console.groq.com/keys" target="_blank" style="color:#6366f1;">Click here to get one</a></p>`;
+      return;
+    }
+  }
+  
+  chat.innerHTML += `<p class="you"><b>You:</b> ${q}</p>`;
+  document.getElementById('q').value="";
+  chat.scrollTop = chat.scrollHeight;
+
+  try {
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions",{
+      method:"POST",
+      headers:{
+        "Authorization":"Bearer "+GROQ_KEY,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        model:"llama-3.1-8b-instant",
+        messages:[{role:"user",content:q}],
+        temperature:0.7
+      })
+    });
+    const data = await res.json();
+    if(data.error) throw new Error(data.error.message);
+    const reply = data.choices[0].message.content;
+    chat.innerHTML += `<p class="scholar"><b>Scholar:</b> ${reply}</p>`;
+  } catch(e) {
+    chat.innerHTML += `<p class="scholar"><b>Scholar:</b> Error: ${e.message}. Check your key at console.groq.com</p>`;
+    GROQ_KEY = '';
+    localStorage.removeItem('scholar_groq');
+  }
+  chat.scrollTop = chat.scrollHeight;
+}
