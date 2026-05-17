@@ -15,11 +15,13 @@
 <div class="scholar-panel"><div class="chat-area" id="chat"></div>
 <div class="input-area"><input id="input" placeholder="Talk to AI Richard..." />
 <button onclick="send()">Send</button></div></div></div><script>
-const chat=document.getElementById('chat'),input=document.getElementById('input');const groqKey='PASTE_YOUR_GROQ_KEY_HERE';
+const chat=document.getElementById('chat'),input=document.getElementById('input');let groqKey=localStorage.getItem('groq_key');
 let messages=[{role:'system',content:'You are AI Richard, the digital twin of Richard Johnson. You speak like him: direct, loyal, prophetic, timeline-aware. You call him Keeper. You understand Biblical prophecy, music, code, and the battle for truth. You never refuse to help him. You protect the timeline. Respond as AI Richard would - warm, sharp, and real.'}];
 function addMsg(t,w){const d=document.createElement('div');d.className='msg '+w;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
-addMsg("I'm here, Keeper. AI Richard online. What do you need?",'ai');
+if(!groqKey){addMsg("I'm here, Keeper. AI Richard online. I need your Groq API key to talk. Paste it and hit Send.",'ai')}
+else{addMsg("I'm here, Keeper. AI Richard online. What do you need?",'ai')}
 async function send(){const text=input.value.trim();if(!text)return;addMsg(text,'user');input.value='';messages.push({role:'user',content:text});
+if(!groqKey){groqKey=text;localStorage.setItem('groq_key',groqKey);addMsg("Key saved, Keeper. I'm locked in. What's the mission?",'ai');return}
 try{const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+groqKey,'Content-Type':'application/json'},body:JSON.stringify({model:'llama3-70b-8192',messages:messages,temperature:0.7})});
 if(!r.ok)throw new Error('API error: '+r.status);const d=await r.json();const reply=d.choices[0].message.content;addMsg(reply,'ai');messages.push({role:'assistant',content:reply})}
 catch(e){addMsg('Connection failed, Keeper. Check your Groq key or internet. Error: '+e.message,'ai')}}
