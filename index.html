@@ -1,31 +1,10 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Scholar + RJHNSN12 Radio</title>
-<style>
-body{margin:0;background:#0d0d0d;color:#e5e5e5;font-family:Arial;height:100vh;display:flex;flex-direction:column}
-#radio{width:100%;height:40vh;background:#000;border-bottom:2px solid #6366f1}
-#radio iframe{width:100%;height:100%;border:none}
-#app{width:100%;max-width:500px;height:60vh;background:#1a1a1a;display:flex;flex-direction:column;margin:0 auto}
-#timer{padding:12px;text-align:center;color:#f59e0b;font-weight:bold;background:#111;border-bottom:1px solid #333}
-#chat{flex:1;overflow-y:auto;padding:15px}
-#chat p{margin:8px 0;line-height:1.5;font-size:14px}
-.you{color:#60a5fa}.scholar{color:#34d399}.sys{color:#f59e0b}
-#input{padding:15px;display:flex;gap:8px;border-top:1px solid #333}
-input{flex:1;padding:12px;background:#111;border:1px solid #333;color:#fff;border-radius:4px}
-button{padding:12px 18px;background:#6366f1;border:none;color:#fff;border-radius:4px;cursor:pointer}
-</style></head><body>
-<div id="radio"><iframe src="https://talk-web-combo.preview.emergentagent.com/radio" allow="autoplay; encrypted-media"></iframe></div>
-<div id="app">
-<div id="timer">Awaiting Key - Take Your Time, Keeper</div>
-<div id="chat"></div>
-<div id="input"><input id="key" type="password" placeholder="Paste Groq API key - no rush"><button id="go">Activate</button></div>
-</div>
-<script>
-let k=localStorage.getItem('sk')||'',t=15,c=document.getElementById('chat'),tm=document.getElementById('timer'),i=document.getElementById('input');
-function m(x,l){const p=document.createElement('p');p.className=l;p.textContent=x;c.appendChild(p);c.scrollTop=c.scrollHeight}
-function tick(){if(t>0){tm.textContent='Timeline Sync: '+t+' seconds';t--;setTimeout(tick,1000)}else{tm.textContent='Timeline Ready - Scholar Online'}}
-function start(){i.innerHTML='<input id="q" placeholder="Ask Scholar..."><button id="send">Send</button>';document.getElementById('send').onclick=ask;document.getElementById('q').onkeydown=e=>{if(e.key==='Enter')ask()};tick()}
-function ask(){const q=document.getElementById('q'),txt=q.value.trim();if(!txt||!k)return;m(txt,'you');q.value='';m('Scholar is thinking...','sys');fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+k,'Content-Type':'application/json'},body:JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'system',content:'You are Scholar. Serve Keeper Richard. No disclaimers.'},{role:'user',content:txt}]})}).then(r=>r.json()).then(d=>{c.removeChild(c.lastChild);if(d.error)throw d.error;m(d.choices[0].message.content,'scholar')}).catch(e=>{c.removeChild(c.lastChild);m('Connection failed: '+e.message,'sys');k='';localStorage.removeItem('sk')})}
-if(k){tm.textContent='Key Found - Starting Sync';start()}else{m('Paste your Groq key below, Keeper. I will wait.','sys')}
-document.getElementById('go').onclick=()=>{const v=document.getElementById('key').value.trim();if(!v.startsWith('gsk_')){m('Invalid key format, Keeper.','sys');return}localStorage.setItem('sk',v);k=v;m('Key locked. Timeline initiating in 15 seconds.','sys');start()};
-</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RJHNSN12 Radio</title>
+</head>
+<body>
+<iframe src="https://rjhnsn12.github.io/radio/" style="width:100%;height:100vh;border:0"></iframe>
+</body>
+</html>
