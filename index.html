@@ -1,213 +1,283 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiet Storm Radio - rjhnsn12</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
-.navbar{background:#000;border-bottom:2px solid #ff1493;padding:15px 0;position:sticky;top:0;z-index:1000}
-.nav-container{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
-.logo{font-size:24px;font-weight:bold;color:#ff1493;text-decoration:none}
-.nav-links{display:flex;gap:25px;list-style:none;flex-wrap:wrap}
-.nav-links a{color:#fff;text-decoration:none;font-weight:500;transition:color 0.3s;cursor:pointer}
-.nav-links a:hover,.nav-links a.active{color:#ff1493}
-.hero{text-align:center;padding:60px 20px;background:linear-gradient(135deg,#1a1a1a 0%,#0a0a0a 100%)}
-.hero h1{font-size:48px;margin-bottom:10px;color:#ff1493;text-shadow:0 0 20px rgba(255,20,147,0.5)}
-.hero p{font-size:18px;color:#ccc;margin-bottom:30px}
-.player-section{max-width:800px;margin:40px auto;padding:30px;background:#1a1a1a;border-radius:15px;border:2px solid #ff1493;box-shadow:0 0 30px rgba(255,20,147,0.3)}
-.now-playing{text-align:center;margin-bottom:20px}
-.now-playing-label{font-size:14px;color:#ff1493;text-transform:uppercase;letter-spacing:2px}
-.now-playing-title{font-size:24px;font-weight:bold;margin:10px 0;min-height:30px}
-.controls{display:flex;justify-content:center;gap:15px;margin:25px 0;flex-wrap:wrap}
-.btn{background:#ff1493;color:#fff;border:none;padding:12px 30px;border-radius:25px;font-size:16px;font-weight:bold;cursor:pointer;transition:all 0.3s}
-.btn:hover{background:#ff69b4;transform:scale(1.05);box-shadow:0 5px 20px rgba(255,20,147,0.4)}
-.btn:disabled{background:#555;cursor:not-allowed;transform:none}
-.btn-secondary{background:#333}
-.btn-secondary:hover{background:#555}
-.volume-control{display:flex;align-items:center;gap:10px;justify-content:center;margin:20px 0}
-.volume-control input[type="range"]{width:200px}
-.playlist{margin-top:30px;max-height:400px;overflow-y:auto}
-.playlist-item{padding:12px 15px;margin:5px 0;background:#0a0a0a;border-left:3px solid transparent;cursor:pointer;transition:all 0.3s;border-radius:5px}
-.playlist-item:hover{background:#222;border-left-color:#ff1493}
-.playlist-item.active{background:#222;border-left-color:#ff1493;color:#ff1493;font-weight:bold}
-.page{display:none;max-width:1200px;margin:40px auto;padding:20px}
-.page.active{display:block}
-.page h2{color:#ff1493;font-size:36px;margin-bottom:20px;text-align:center}
-.content-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin:30px 0}
-.card{background:#1a1a1a;padding:25px;border-radius:10px;border:1px solid #333}
-.card h3{color:#ff1493;margin-bottom:15px}
-.card p{line-height:1.6;color:#ccc}
-.form-group{margin-bottom:20px}
-.form-group label{display:block;margin-bottom:8px;color:#ff1493;font-weight:bold}
-.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px;background:#0a0a0a;border:1px solid #333;border-radius:5px;color:#fff;font-size:16px}
-.form-group textarea{min-height:120px;resize:vertical}
-.footer{text-align:center;padding:40px 20px;border-top:1px solid #333;margin-top:60px;color:#666}
-.loading{text-align:center;padding:20px;color:#ff1493}
-.error{background:#ff0000;color:#fff;padding:15px;border-radius:5px;margin:20px 0;text-align:center}
-.success{background:#00ff00;color:#000;padding:15px;border-radius:5px;margin:20px 0;text-align:center}
-.file-input{display:none}
-@media (max-width:768px){
-.hero h1{font-size:32px}
-.nav-links{gap:15px;font-size:14px}
-.controls{flex-direction:column}
-.btn{width:100%}
-}
-</style>
-</head><body>
-<nav class="navbar">
-<div class="nav-container">
-<a href="#" class="logo" onclick="showPage('home')">Quiet Storm Radio</a>
-<ul class="nav-links">
-<li><a onclick="showPage('home')" class="active">Home</a></li>
-<li><a onclick="showPage('shop')">Shop</a></li>
-<li><a onclick="showPage('podcast')">Podcast</a></li>
-<li><a onclick="showPage('radio')">Radio Station</a></li>
-<li><a onclick="showPage('amos')">Amos Sample</a></li>
-<li><a onclick="loadLocalFiles()">Load Local Music</a></li>
-</ul>
-</div>
-</nav>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiet Storm Radio - rjhnsn12</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap');
+        
+        :root {
+            --pink: #ff1493;
+            --pink-dark: #c41072;
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #13131a;
+            --bg-card: #1a1a24;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1b5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .glass {
+            background: rgba(26, 26, 36, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 20, 147, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #ff1493 0%, #ff6ec7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #ff1493 0%, #ff6ec7 100%);
+        }
+        
+        .glow-pink {
+            box-shadow: 0 0 20px rgba(255, 20, 147, 0.4), 0 0 40px rgba(255, 20, 147, 0.1);
+        }
+        
+        .hover-glow:hover {
+            box-shadow: 0 0 30px rgba(255, 20, 147, 0.6);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+        
+        .vinyl-spin {
+            animation: spin 3s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .visualizer-bar {
+            background: linear-gradient(to top, #ff1493, #ff6ec7);
+            animation: dance 0.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes dance {
+            0% { height: 20%; }
+            100% { height: 100%; }
+        }
+        
+        .visualizer-bar:nth-child(1) { animation-delay: 0.1s; }
+        .visualizer-bar:nth-child(2) { animation-delay: 0.2s; }
+        .visualizer-bar:nth-child(3) { animation-delay: 0.3s; }
+        .visualizer-bar:nth-child(4) { animation-delay: 0.4s; }
+        .visualizer-bar:nth-child(5) { animation-delay: 0.5s; }
+        
+        .progress-bar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--pink);
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 20, 147, 0.8);
+        }
+        
+        .progress-bar::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: var(--pink);
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 0 10px rgba(255, 20, 147, 0.8);
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .nav-link.active {
+            color: var(--pink);
+            position: relative;
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--pink);
+            border-radius: 2px;
+        }
+        
+        .track-item:hover {
+            background: rgba(255, 20, 147, 0.1);
+        }
+        
+        .track-item.active {
+            background: rgba(255, 20, 147, 0.2);
+            border-left: 3px solid var(--pink);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 20, 147, 0.4);
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--pink);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--pink-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Gradient Effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-[120px] opacity-10"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-[120px] opacity-10"></div>
+    </div>
 
-<div id="home" class="page active">
-<div class="hero">
-<h1>Quiet Storm Radio</h1>
-<p>24/7 Smooth R&B, Soul & Jazz - Broadcasting Live</p>
-</div>
-<div class="player-section">
-<div class="now-playing">
-<div class="now-playing-label">Now Playing</div>
-<div class="now-playing-title" id="currentTrack">Click Load Local Music to begin</div>
-</div>
-<div class="controls">
-<button class="btn" id="playBtn" onclick="togglePlay()">▶ Listen Live</button>
-<button class="btn btn-secondary" onclick="prevTrack()">⏮ Previous</button>
-<button class="btn btn-secondary" onclick="nextTrack()">Next ⏭</button>
-</div>
-<div class="volume-control">
-<span>🔊</span>
-<input type="range" id="volumeSlider" min="0" max="100" value="70" onchange="setVolume(this.value)">
-<span id="volumeValue">70%</span>
-</div>
-<div class="playlist" id="playlist"></div>
-</div>
-</div>
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 gradient-bg rounded-full flex items-center justify-center glow-pink">
+                        <i class="fas fa-broadcast-tower text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-display text-2xl font-bold gradient-text">Quiet Storm</h1>
+                        <p class="text-xs text-gray-400">rjhnsn12</p>
+                    </div>
+                </div>
+                
+                <nav class="hidden md:flex items-center space-x-8">
+                    <button class="nav-link active text-sm font-medium transition-colors hover:text-pink-400" data-page="radio">
+                        Radio
+                    </button>
+                    <button class="nav-link text-sm font-medium text-gray-300 transition-colors hover:text-pink-400" data-page="podcast">
+                        Podcast
+                    </button>
+                    <button class="nav-link text-sm font-medium text-gray-300 transition-colors hover:text-pink-400" data-page="shop">
+                        Shop
+                    </button>
+                    <button class="nav-link text-sm font-medium text-gray-300 transition-colors hover:text-pink-400" data-page="amos">
+                        Amos Sample
+                    </button>
+                </nav>
+                
+                <button id="mobileMenuBtn" class="md:hidden text-2xl text-gray-300 hover:text-pink-400">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-gray-800">
+            <div class="px-4 py-3 space-y-2">
+                <button class="nav-link active block w-full text-left py-2 text-sm font-medium" data-page="radio">Radio</button>
+                <button class="nav-link block w-full text-left py-2 text-sm font-medium text-gray-300" data-page="podcast">Podcast</button>
+                <button class="nav-link block w-full text-left py-2 text-sm font-medium text-gray-300" data-page="shop">Shop</button>
+                <button class="nav-link block w-full text-left py-2 text-sm font-medium text-gray-300" data-page="amos">Amos Sample</button>
+            </div>
+        </div>
+    </header>
 
-<div id="shop" class="page">
-<h2>Shop</h2>
-<div class="content-grid">
-<div class="card"><h3>Quiet Storm Merch</h3><p>T-Shirts, hoodies, and mugs. Coming soon.</p></div>
-<div class="card"><h3>Digital Downloads</h3><p>Exclusive mixes and compilations.</p></div>
-<div class="card"><h3>VIP Membership</h3><p>Ad-free listening + exclusive content.</p></div>
-</div>
-</div>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 pb-40">
+        
+        <!-- Radio Page -->
+        <div id="radio" class="page active">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Player Card -->
+                <div class="lg:col-span-2">
+                    <div class="glass rounded-3xl p-8 glow-pink">
+                        <div class="flex flex-col items-center">
+                            <!-- Album Art & Visualizer -->
+                            <div class="relative mb-8">
+                                <div id="vinyl" class="w-64 h-64 md:w-80 md:h-80 rounded-full gradient-bg p-2 shadow-2xl">
+                                    <div class="w-full h-full bg-gray-900 rounded-full flex items-center justify-center overflow-hidden">
+                                        <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center border-4 border-gray-700">
+                                            <div class="w-3 h-3 bg-pink-500 rounded-full"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="visualizer" class="hidden absolute inset-0 items-end justify-center gap-1 pb-4">
+                                    <div class="visualizer-bar w-2 rounded-t-full"></div>
+                                    <div class="visualizer-bar w-2 rounded-t-full"></div>
+                                    <div class="visualizer-bar w-2 rounded-t-full"></div>
+                                    <div class="visualizer-bar w-2 rounded-t-full"></div>
+                                    <div class="visualizer-bar w-2 rounded-t-full"></div>
+                                </div>
+                            </div>
 
-<div id="podcast" class="page">
-<h2>Podcast</h2>
-<div class="card">
-<h3>Quiet Storm Sessions</h3>
-<p>Weekly deep dives into R&B history, artist interviews, and behind-the-scenes stories.</p>
-<p><strong>Episodes coming soon.</strong></p>
-</div>
-</div>
+                            <!-- Track Info -->
+                            <div class="text-center mb-6 w-full">
+                                <h2 id="trackTitle" class="text-2xl font-bold mb-2">Select a track to begin</h2>
+                                <p id="trackArtist" class="text-gray-400">24/7 Smooth R&B, Soul & Jazz</p>
+                                <div class="flex items-center justify-center gap-2 mt-4">
+                                    <div class="w-2 h-2 bg-pink-500 rounded-full animate-pulse"></div>
+                                    <span id="liveStatus" class="text-sm text-pink-400 font-medium">OFFLINE</span>
+                                </div>
+                            </div>
 
-<div id="radio" class="page">
-<h2>Radio Station Info</h2>
-<div class="content-grid">
-<div class="card"><h3>About Us</h3><p>Quiet Storm Radio is your 24/7 destination for smooth R&B, soul, and jazz. Independently owned and operated.</p></div>
-<div class="card"><h3>Schedule</h3><p>Monday-Friday: Morning Vibes 6am-10am<br>Weekends: Slow Jam Saturday & Sunday Brunch</p></div>
-<div class="card"><h3>Request Line</h3><p>Email requests: dj@quietstormradio.com</p></div>
-</div>
-</div>
+                            <!-- Progress Bar -->
+                            <div class="w-full mb-6">
+                                <input type="range" id="progressBar" class="progress-bar w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" value="0" min="0" max="100">
+                                <div class="flex justify-between text-xs text-gray-500 mt-2">
+                                    <span id="currentTime">0:00</span>
+                                    <span id="duration">0:00</span>
+                                </div>
+                            </div>
 
-<div id="amos" class="page">
-<h2>Amos Sample</h2>
-<div class="card">
-<h3>Featured Artist Spotlight</h3>
-<p>Amos Sample brings soulful vocals and smooth production. Check back for exclusive tracks and interviews.</p>
-</div>
-</div>
-
-<input type="file" id="fileInput" class="file-input" multiple accept="audio/*" onchange="handleFiles(this.files)">
-
-<div class="footer">
-<p>&copy; 2026 Quiet Storm Radio. All rights reserved. | Independently operated - No Emergent fees.</p>
-</div>
-
-<script>
-let audioPlayer = new Audio();
-let playlist = [];
-let currentIndex = 0;
-let isPlaying = false;
-
-function showPage(pageId){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.getElementById(pageId).classList.add('active');
-document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
-event.target.classList.add('active');
-}
-
-function loadLocalFiles(){
-document.getElementById('fileInput').click();
-}
-
-function handleFiles(files){
-playlist = [];
-const playlistEl = document.getElementById('playlist');
-playlistEl.innerHTML = '';
-Array.from(files).forEach((file,i)=>{
-const url = URL.createObjectURL(file);
-playlist.push({name:file.name.replace('.mp3','').replace('.wav',''),url:url});
-const div = document.createElement('div');
-div.className = 'playlist-item';
-div.textContent = `${i+1}. ${file.name}`;
-div.onclick = ()=>playTrack(i);
-playlistEl.appendChild(div);
-});
-if(playlist.length>0){
-document.getElementById('currentTrack').textContent = 'Ready - Click Listen Live';
-document.getElementById('playBtn').disabled = false;
-}
-}
-
-function playTrack(index){
-if(playlist.length===0)return;
-currentIndex = index;
-audioPlayer.src = playlist[index].url;
-audioPlayer.play();
-isPlaying = true;
-document.getElementById('playBtn').textContent = '⏸ Pause';
-document.getElementById('currentTrack').textContent = playlist[index].name;
-document.querySelectorAll('.playlist-item').forEach((item,i)=>{
-item.classList.toggle('active',i===index);
-});
-}
-
-function togglePlay(){
-if(playlist.length===0){alert('Click Load Local Music first to select your 65 MP3 files');return;}
-if(isPlaying){audioPlayer.pause();isPlaying=false;document.getElementById('playBtn').textContent='▶ Listen Live';}
-else{if(audioPlayer.src){audioPlayer.play();}else{playTrack(0);}isPlaying=true;document.getElementById('playBtn').textContent='⏸ Pause';}
-}
-
-function nextTrack(){
-if(playlist.length===0)return;
-currentIndex=(currentIndex+1)%playlist.length;
-playTrack(currentIndex);
-}
-
-function prevTrack(){
-if(playlist.length===0)return;
-currentIndex=(currentIndex-1+playlist.length)%playlist.length;
-playTrack(currentIndex);
-}
-
-function setVolume(val){
-audioPlayer.volume=val/100;
-document.getElementById('volumeValue').textContent=val+'%';
-}
-
-audioPlayer.addEventListener('ended',nextTrack);
-audioPlayer.addEventListener('error',()=>{console.log('Audio error');nextTrack();});
-
-document.getElementById('playBtn').disabled = true;
-setVolume(70);
-</script>
-</body></html>
+                            <!-- Controls -->
+                            <div class="flex items-center justify-center gap-6 mb-6">
+                                <button id="shuffleBtn" class="text-2xl text-gray-400 hover:text-pink-400 transition-colors">
+                                    <i class="fas fa-random"></i>
+                                </button>
+                                <button id="prevBtn" class="text-3xl text-gray-300 hover:text-pink-400 transition-colors">
+                                    <i class="fas fa-step-backward"></i>
+                                </button>
+                                <button id="playBtn" class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center text-white text-2xl hover-glow transition-all">
