@@ -5,71 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>King Richard Radio</title>
   <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #0a0a0a;
-      color: #fff;
-      margin: 0;
-      padding: 20px;
-    }
-   .container { max-width: 900px; margin: 0 auto; }
-   .box {
-      background: #1a1a1a;
-      border: 2px solid #ff3366;
-      border-radius: 12px;
-      padding: 25px;
-      margin: 20px 0;
-    }
-   .agent-box { border-color: #3366ff; }
-   .music-box { border-color: #33ff66; }
+    body { font-family: system-ui, sans-serif; background: #0a0a0a; color: #fff; margin: 0; padding: 20px; }
+  .container { max-width: 900px; margin: 0 auto; }
+  .box { background: #1a1a1a; border: 2px solid #ff3366; border-radius: 12px; padding: 25px; margin: 20px 0; }
+  .agent-box { border-color: #3366ff; }
+  .music-box { border-color: #33ff66; }
     h1 { color: #ff3366; text-align: center; margin: 0 0 10px 0; }
     h2 { font-size: 18px; margin: 0 0 15px 0; }
-   .listeners { color: #ff3366; font-size: 14px; text-align: center; margin: 10px 0; }
+  .listeners { color: #ff3366; font-size: 14px; text-align: center; margin: 10px 0; }
+  .status { color: #888; font-size: 12px; text-align: center; margin: 5px 0; }
     audio { width: 100%; margin: 15px 0; }
-    #chatLog {
-      background: #0a0a0a;
-      border: 1px solid #333;
-      border-radius: 6px;
-      padding: 15px;
-      height: 250px;
-      overflow-y: auto;
-      margin-bottom: 15px;
-      text-align: left;
-    }
-   .msg { margin: 8px 0; font-size: 14px; }
-   .user { color: #33ff66; }
-   .bot { color: #ccc; }
-   .input-row { display: flex; gap: 10px; }
-    input[type="text"] {
-      flex: 1;
-      padding: 12px;
-      background: #0a0a0a;
-      border: 1px solid #444;
-      color: #fff;
-      border-radius: 6px;
-    }
-    button {
-      padding: 12px 24px;
-      background: #3366ff;
-      border: none;
-      color: #fff;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-   .disclaimer {
-      color: #888;
-      font-size: 11px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    /* Keep your original music player styles */
-   .upload-area {
-      border: 2px dashed #444;
-      border-radius: 8px;
-      padding: 40px;
-      text-align: center;
-      margin: 20px 0;
-    }
+    #chatLog { background: #0a0a0a; border: 1px solid #333; border-radius: 6px; padding: 15px; height: 250px; overflow-y: auto; margin-bottom: 15px; text-align: left; }
+  .msg { margin: 8px 0; font-size: 14px; }
+  .user { color: #33ff66; }
+  .bot { color: #ccc; }
+  .error { color: #ff3366; }
+  .system { color: #3366ff; }
+  .input-row { display: flex; gap: 10px; }
+    input[type="text"] { flex: 1; padding: 12px; background: #0a0a0a; border: 1px solid #444; color: #fff; border-radius: 6px; }
+    button { padding: 12px 24px; background: #3366ff; border: none; color: #fff; border-radius: 6px; cursor: pointer; }
+  .disclaimer { color: #888; font-size: 11px; text-align: center; margin-bottom: 20px; }
+  .upload-area { border: 2px dashed #444; border-radius: 8px; padding: 40px; text-align: center; margin: 20px 0; }
   </style>
 </head>
 <body>
@@ -82,16 +38,15 @@
     <div class="box">
       <h1>King Richard</h1>
       <div class="listeners">1,240 listeners live</div>
+      <div class="status" id="radioStatus">Set stream URL in config</div>
       <audio controls autoplay id="radioPlayer">
-        <source src="REPLACE_WITH_YOUR_RADIO_STREAM_URL" type="audio/mpeg">
-        Your browser doesn't support radio streaming.
+        <source id="radioSource" src="" type="audio/mpeg">
       </audio>
     </div>
 
     <!-- GROQ 3.3 AGENT -->
     <div class="box agent-box">
       <h2 style="color: #3366ff;">Scholar Offline - Powered by Groq Llama 3.3</h2>
-      <p style="color: #999; font-size: 13px; margin: 0 0 15px 0;">No keys. No cost. Your way. Runs on Groq.</p>
       <div id="chatLog"></div>
       <div class="input-row">
         <input type="text" id="userInput" placeholder="Ask Scholar anything...">
@@ -106,32 +61,50 @@
         <button style="background: #33ff66; color: #000;">My Files</button>
         <button style="background: transparent; border: 1px solid #444; color: #ccc;">Free Music Online</button>
       </div>
-
       <div class="upload-area">
         <div style="font-size: 24px;">⬆️</div>
         <p><strong>Drag & drop audio files here</strong></p>
         <p style="color: #888; font-size: 13px;">or click to browse. Supports MP3, WAV, FLAC, M4A</p>
       </div>
-
       <h3>Your Playlist</h3>
       <div style="background: #33ff66; color: #000; padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
         <span>▶ Moavii - Try Me (freetouse.com)<br><small>Local File • 5.06 MB • 2:12</small></span>
         <button style="background: #000; color: #33ff66; padding: 6px 12px; width: auto;">Remove</button>
       </div>
     </div>
-
   </div>
 
   <script>
-    // GROQ AGENT CODE
-    const GROQ_KEY = 'gsk_YOUR_GROQ_API_KEY_HERE'; // <-- PASTE YOUR KEY HERE
+    // CONFIG - RADIO ONLY. NO GROQ KEY HERE.
+    const RADIO_STREAM_URL = 'REPLACE_WITH_YOUR_RADIO_STREAM_URL';
+
+    // RADIO PLAYER SETUP
+    const radioPlayer = document.getElementById('radioPlayer');
+    const radioSource = document.getElementById('radioSource');
+    const radioStatus = document.getElementById('radioStatus');
+
+    if (RADIO_STREAM_URL &&!RADIO_STREAM_URL.includes('REPLACE')) {
+      radioSource.src = RADIO_STREAM_URL;
+      radioPlayer.load();
+      radioStatus.textContent = 'Connecting to stream...';
+      radioPlayer.addEventListener('playing', () => radioStatus.textContent = 'Live');
+      radioPlayer.addEventListener('error', () => {
+        radioStatus.textContent = 'Error: Stream blocked or invalid URL';
+        radioStatus.style.color = '#ff3366';
+      });
+    } else {
+      radioStatus.textContent = 'ERROR: Paste radio stream URL in code';
+      radioStatus.style.color = '#ff3366';
+    }
+
+    // GROQ AGENT - CALLS YOUR BACKEND, NOT GROQ DIRECTLY
     const chatLog = document.getElementById('chatLog');
     const userInput = document.getElementById('userInput');
 
     function addMsg(text, who) {
       const div = document.createElement('div');
       div.className = 'msg ' + who;
-      div.textContent = (who === 'user'? 'You: ' : 'Scholar: ') + text;
+      div.textContent = (who === 'user'? 'You: ' : who === 'system'? '' : 'Scholar: ') + text;
       chatLog.appendChild(div);
       chatLog.scrollTop = chatLog.scrollHeight;
     }
@@ -144,35 +117,29 @@
       addMsg('Thinking...', 'bot');
 
       try {
-        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        // This calls YOUR Netlify function, not Groq. Key is hidden on server.
+        const res = await fetch('/.netlify/functions/groq', {
           method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + GROQ_KEY,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: 'llama-3.3-70b-versatile',
-            messages: [{ role: 'user', content: msg }],
-            temperature: 0.7,
-            max_tokens: 1024
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg })
         });
         const data = await res.json();
         chatLog.removeChild(chatLog.lastChild);
-        if (data.choices && data.choices[0]) {
-          addMsg(data.choices[0].message.content, 'bot');
+        if (data.reply) {
+          addMsg(data.reply, 'bot');
         } else {
-          addMsg('Error: Check your Groq API key', 'bot');
+          addMsg('Error: ' + (data.error || 'Server error'), 'error');
         }
       } catch (e) {
         chatLog.removeChild(chatLog.lastChild);
-        addMsg('Connection error. Check API key.', 'bot');
+        addMsg('Connection error. Check Netlify function.', 'error');
       }
     }
 
     userInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') sendMessage();
     });
+    addMsg('Agent ready. Backend handles Groq key.', 'system');
   </script>
 </body>
 </html>
