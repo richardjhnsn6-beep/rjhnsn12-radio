@@ -1,93 +1,1122 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scholar + RJHNSN12 Radio</title>
-  <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#0d0d0d;color:#e5e5e5;font-family:Arial,sans-serif;display:flex;flex-direction:column;height:100vh}
-  .header{background:#1a1a1a;padding:15px;text-align:center;border-bottom:2px solid #6366f1}
-  .header h1{color:#6366f1;font-size:22px}
-  .header p{color:#888;font-size:13px;margin-top:5px}
-  .container{display:flex;flex:1;overflow:hidden}
-  .radio-frame{flex:1;border:none;min-width:400px}
-  .scholar-panel{width:400px;background:#1a1a1a;display:flex;flex-direction:column;border-left:1px solid #333}
-  #chat{flex:1;overflow-y:auto;padding:15px;border-bottom:1px solid #333}
-  #chat p{margin:8px 0;line-height:1.5;font-size:14px}
-  .you{color:#60a5fa}.scholar{color:#34d399}.sys{color:#f59e0b}
-  .input-area{padding:15px;display:flex;gap:8px}
-  #q{flex:1;padding:12px;background:#111;border:1px solid #333;color:#fff;border-radius:4px}
-  button{padding:12px 18px;background:#6366f1;border:none;color:#fff;border-radius:4px;cursor:pointer}
-  button:hover{background:#5155e8}
-  .note{padding:10px 15px;font-size:11px;color:#666;text-align:center;background:#111}
-  @media (max-width: 900px){
-   .container{flex-direction:column}
-   .scholar-panel{width:100%;height:400px;border-left:none;border-top:1px solid #333}
-   .radio-frame{min-height:400px}
-  }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VelvetWave FM - Soft Funk Radio</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    :root {
+        --bg-primary: #0a0a0f;
+        --bg-secondary: #13131a;
+        --bg-tertiary: #1a1a24;
+        --pink-primary: #ff2d95;
+        --pink-secondary: #ff5fb2;
+        --purple: #8b5cf6;
+        --text-primary: #f5f5f7;
+        --text-secondary: #a1a1aa;
+        --border: #27272a;
+        --glow: rgba(255, 45, 149, 0.4);
+    }
+    
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+    
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(255, 45, 149, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 50% 50%, rgba(255, 45, 149, 0.05) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Header */
+    header {
+        background: rgba(19, 19, 26, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+    
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 0;
+    }
+    
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--pink-primary), var(--purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--pink-primary), var(--purple));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 30px var(--glow);
+    }
+    
+    .logo-icon svg {
+        width: 24px;
+        height: 24px;
+        fill: white;
+    }
+    
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+    }
+    
+    .nav-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 0.5rem 0;
+    }
+    
+    .nav-links a:hover,
+    .nav-links a.active {
+        color: var(--pink-primary);
+    }
+    
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--pink-primary), var(--purple));
+        transition: width 0.3s ease;
+    }
+    
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+        width: 100%;
+    }
+    
+    .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--text-primary);
+        cursor: pointer;
+        padding: 0.5rem;
+    }
+    
+    /* Hero Section */
+    .hero {
+        padding: 6rem 0 4rem;
+        text-align: center;
+    }
+    
+    .hero h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, var(--text-primary) 0%, var(--pink-secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
+    }
+    
+    .hero p {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        margin-bottom: 3rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .listen-live-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: linear-gradient(135deg, var(--pink-primary), var(--pink-secondary));
+        color: white;
+        font-size: 1.25rem;
+        font-weight: 700;
+        padding: 1.25rem 3rem;
+        border: none;
+        border-radius: 100px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 40px var(--glow), 0 0 0 0 var(--glow);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .listen-live-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+    
+    .listen-live-btn:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .listen-live-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 50px var(--glow), 0 0 0 0 var(--glow);
+    }
+    
+    .listen-live-btn:active {
+        transform: translateY(0);
+    }
+    
+    .listen-live-btn.playing {
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% {
+            box-shadow: 0 10px 40px var(--glow), 0 0 0 0 var(--glow);
+        }
+        50% {
+            box-shadow: 0 10px 40px var(--glow), 0 0 0 20px rgba(255, 45, 149, 0);
+        }
+    }
+    
+    /* Now Playing */
+    .now-playing {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin: 4rem auto;
+        max-width: 800px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+    
+    .now-playing-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 1.5rem;
+        color: var(--pink-primary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .live-dot {
+        width: 10px;
+        height: 10px;
+        background: var(--pink-primary);
+        border-radius: 50%;
+        animation: blink 1.5s infinite;
+    }
+    
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+    
+    .track-info {
+        margin-bottom: 2rem;
+    }
+    
+    .track-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .track-genre {
+        color: var(--text-secondary);
+        font-size: 1rem;
+    }
+    
+    /* Audio Player */
+    .audio-player {
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+    }
+    
+    .player-controls {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .play-pause-btn {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--pink-primary), var(--pink-secondary));
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px var(--glow);
+    }
+    
+    .play-pause-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 30px var(--glow);
+    }
+    
+    .play-pause-btn svg {
+        width: 24px;
+        height: 24px;
+        fill: white;
+    }
+    
+    .volume-control {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .volume-icon {
+        color: var(--text-secondary);
+    }
+    
+    .volume-slider {
+        flex: 1;
+        height: 6px;
+        background: var(--bg-secondary);
+        border-radius: 3px;
+        outline: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+    }
+    
+    .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--pink-primary);
+        cursor: pointer;
+        box-shadow: 0 0 10px var(--glow);
+        transition: all 0.2s ease;
+    }
+    
+    .volume-slider::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+    }
+    
+    .volume-slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--pink-primary);
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 0 10px var(--glow);
+    }
+    
+    .visualizer {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        height: 60px;
+        gap: 4px;
+    }
+    
+    .visualizer-bar {
+        flex: 1;
+        background: linear-gradient(to top, var(--pink-primary), var(--purple));
+        border-radius: 2px;
+        transition: height 0.1s ease;
+        opacity: 0.3;
+    }
+    
+    .visualizer-bar.active {
+        opacity: 1;
+    }
+    
+    /* Pages */
+    .page {
+        display: none;
+        min-height: calc(100vh - 200px);
+        padding: 4rem 0;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    .page.active {
+        display: block;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .page-title {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--text-primary), var(--pink-secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .page-subtitle {
+        color: var(--text-secondary);
+        font-size: 1.25rem;
+        margin-bottom: 3rem;
+    }
+    
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+    
+    .card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-4px);
+        border-color: var(--pink-primary);
+        box-shadow: 0 10px 40px rgba(255, 45, 149, 0.2);
+    }
+    
+    .card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--pink-primary);
+    }
+    
+    .card p {
+        color: var(--text-secondary);
+        line-height: 1.8;
+    }
+    
+    .schedule-item {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        padding: 1.5rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .schedule-item:hover {
+        border-color: var(--pink-primary);
+        transform: translateX(4px);
+    }
+    
+    .schedule-time {
+        color: var(--pink-primary);
+        font-weight: 600;
+        min-width: 120px;
+    }
+    
+    .schedule-show {
+        flex: 1;
+        margin: 0 1rem;
+    }
+    
+    .schedule-show h4 {
+        margin-bottom: 0.25rem;
+    }
+    
+    .schedule-show p {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+    }
+    
+    /* Footer */
+    footer {
+        background: var(--bg-secondary);
+        border-top: 1px solid var(--border);
+        padding: 3rem 0 2rem;
+        margin-top: 6rem;
+    }
+    
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 3rem;
+        margin-bottom: 2rem;
+    }
+    
+    .footer-section h4 {
+        margin-bottom: 1rem;
+        color: var(--pink-primary);
+    }
+    
+    .footer-section ul {
+        list-style: none;
+    }
+    
+    .footer-section ul li {
+        margin-bottom: 0.75rem;
+    }
+    
+    .footer-section a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .footer-section a:hover {
+        color: var(--pink-primary);
+    }
+    
+    .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .nav-links {
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: rgba(19, 19, 26, 0.98);
+            backdrop-filter: blur(20px);
+            flex-direction: column;
+            padding: 2rem;
+            gap: 1.5rem;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-links.active {
+            transform: translateX(0);
+        }
+        
+        .mobile-menu-btn {
+            display: block;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+        }
+        
+        .listen-live-btn {
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+        }
+        
+        .now-playing {
+            padding: 1.5rem;
+        }
+        
+        .track-title {
+            font-size: 1.5rem;
+        }
+        
+        .player-controls {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .schedule-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .schedule-time {
+            min-width: auto;
+        }
+    }
+</style>
 </head>
 <body>
-  <div class="header">
-    <h1>Scholar + RJHNSN12 Radio</h1>
-    <p>24/7 Music & Biblical Wisdom - Live Now</p>
-  </div>
-  <div class="container">
-    <iframe class="radio-frame" src="https://talk-web-combo.preview.emergentagent.com/radio" allow="autoplay; encrypted-media"></iframe>
-    <div class="scholar-panel">
-      <div id="chat">
-        <p class="scholar"><b>Scholar:</b> I'm here with you, Richard. Ask me anything while you listen to RJHNSN12 Radio.</p>
-        <p class="sys"><b>Note:</b> To use AI chat, you'll need a free Groq key. <a href="https://console.groq.com/keys" target="_blank" style="color:#6366f1;">Get one here</a> - takes 30 seconds.</p>
-      </div>
-      <div class="input-area">
-        <input id="q" placeholder="Type your question..." onkeypress="if(event.key==='Enter')ask()">
-        <button onclick="ask()">Send</button>
-      </div>
-    </div>
-  </div>
-  <div class="note">RJHNSN12 Radio + Scholar AI - Handles 1,240+ viewers with zero cost</div>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                        </svg>
+                    </div>
+                    VelvetWave FM
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
+                    <li><a href="#schedule" class="nav-link" data-page="schedule">Schedule</a></li>
+                    <li><a href="#shows" class="nav-link" data-page="shows">Shows</a></li>
+                    <li><a href="#about" class="nav-link" data-page="about">About</a></li>
+                    <li><a href="#contact" class="nav-link" data-page="contact">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- HOME PAGE -->
+        <div id="home" class="page active">
+            <section class="hero">
+                <div class="container">
+                    <h1>Smooth Sounds, All Day Long</h1>
+                    <p>Your destination for the silkiest instrumental soft funk, quiet storm grooves, and late-night vibes. No vocals, just pure instrumental bliss.</p>
+                    <button class="listen-live-btn" id="mainListenBtn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        LISTEN LIVE
+                    </button>
+                </div>
+            </section>
+
+            <div class="container">
+                <div class="now-playing">
+                    <div class="now-playing-header">
+                        <div class="live-dot"></div>
+                        <span>Now Playing</span>
+                    </div>
+                    <div class="track-info">
+                        <div class="track-title">Instrumental Soft Funk - No Vocals</div>
+                        <div class="track-genre">Quiet Storm • Instrumental • Smooth Funk</div>
+                    </div>
+                    
+                    <div class="audio-player">
+                        <div class="player-controls">
+                            <button class="play-pause-btn" id="playPauseBtn">
+                                <svg id="playIcon" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                                <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
+                                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                                </svg>
+                            </button>
+                            <div class="volume-control">
+                                <svg class="volume-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                </svg>
+                                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
+                            </div>
+                        </div>
+                        <div class="visualizer" id="visualizer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCHEDULE PAGE -->
+        <div id="schedule" class="page">
+            <div class="container">
+                <h1 class="page-title">Schedule</h1>
+                <p class="page-subtitle">24/7 Instrumental soft funk and quiet storm programming</p>
+                
+                <div class="schedule-item">
+                    <div class="schedule-time">12 AM - 6 AM</div>
+                    <div class="schedule-show">
+                        <h4>Midnight Velvet</h4>
+                        <p>Deep cuts and atmospheric instrumentals for the night owls</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">6 AM - 12 PM</div>
+                    <div class="schedule-show">
+                        <h4>Sunrise Groove</h4>
+                        <p>Uplifting soft funk to start your morning smooth</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">12 PM - 6 PM</div>
+                    <div class="schedule-show">
+                        <h4>Afternoon Chill</h4>
+                        <p>Laid-back instrumental grooves for your workday</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">6 PM - 12 AM</div>
+                    <div class="schedule-show">
+                        <h4>Quiet Storm Sessions</h4>
+                        <p>Premium instrumental R&B and smooth funk classics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SHOWS PAGE -->
+        <div id="shows" class="page">
+            <div class="container">
+                <h1 class="page-title">Our Shows</h1>
+                <p class="page-subtitle">Curated programs for every mood and moment</p>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>Quiet Storm Sessions</h3>
+                        <p>The smoothest instrumental R&B, jazz fusion, and soft funk from the 70s to today. Perfect for unwinding after a long day. No vocals, just pure instrumental mastery.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Sunrise Groove</h3>
+                        <p>Start your morning with positive vibrations. Upbeat yet mellow instrumental funk and soul to ease you into your day with style and grace.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Midnight Velvet</h3>
+                        <p>When the world sleeps, we come alive. Deep instrumental cuts, rare grooves, and atmospheric soundscapes for your late-night journey.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Soul Jazz Sunday</h3>
+                        <p>A weekly exploration of instrumental soul jazz, featuring Hammond organs, groovy basslines, and silky smooth arrangements from legendary artists.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABOUT PAGE -->
+        <div id="about" class="page">
+            <div class="container">
+                <h1 class="page-title">About VelvetWave FM</h1>
+                <p class="page-subtitle">The home of instrumental soft funk and quiet storm radio</p>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>Our Mission</h3>
+                        <p>VelvetWave FM was founded on the belief that instrumental music speaks directly to the soul. We curate the finest soft funk, quiet storm, and smooth jazz instrumentals from around the world, creating a sanctuary of sound for our listeners 24/7.</p>
+                    </div>
+                    <div class="card">
+                        <h3>No Vocals, Pure Vibes</h3>
+                        <p>We specialize exclusively in instrumental tracks. No lyrics, no distractions – just the pure emotional power of music. Our carefully selected playlist features silky basslines, warm keyboards, and grooving drum breaks.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Global Community</h3>
+                        <p>Broadcasting to listeners in over 150 countries, VelvetWave FM has become the go-to destination for instrumental soft funk lovers worldwide. Join our community of smooth music enthusiasts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT PAGE -->
+        <div id="contact" class="page">
+            <div class="container">
+                <h1 class="page-title">Get In Touch</h1>
+                <p class="page-subtitle">We'd love to hear from you</p>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>General Inquiries</h3>
+                        <p>Email: hello@velvetwave.fm<br>Phone: 1-800-VELVET-FM<br>Hours: 24/7 Listener Support</p>
+                    </div>
+                    <div class="card">
+                        <h3>Submit Your Music</h3>
+                        <p>Are you an artist creating instrumental soft funk or quiet storm? We'd love to feature your work. Send demos to: music@velvetwave.fm</p>
+                    </div>
+                    <div class="card">
+                        <h3>Advertising</h3>
+                        <p>Reach our engaged community of music lovers. For advertising opportunities and partnerships, contact: ads@velvetwave.fm</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>VelvetWave FM</h4>
+                    <p>Your 24/7 destination for instrumental soft funk and quiet storm vibes.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#schedule" data-page="schedule">Schedule</a></li>
+                        <li><a href="#shows" data-page="shows">Shows</a></li>
+                        <li><a href="#about" data-page="about">About</a></li>
+                        <li><a href="#contact" data-page="contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">SoundCloud</a></li>
+                        <li><a href="#">Newsletter</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 VelvetWave FM. All rights reserved. Instrumental Soft Funk - No Vocals.</p>
+            </div>
+        </div>
+    </footer>
+
 <script>
-let GROQ_KEY = localStorage.getItem('scholar_groq') || '';
-function promptForKey() {
-  const key = prompt('First time setup:\nPaste your FREE Groq key (starts with gsk_)\n\nGet one at: console.groq.com/keys');
-  if (key && key.startsWith('gsk_')) {
-    GROQ_KEY = key;
-    localStorage.setItem('scholar_groq', key);
-    return true;
-  }
-  return false;
-}
-async function ask(){
-  const q = document.getElementById('q').value.trim();
-  const chat = document.getElementById('chat');
-  if(!q) return;
-  if(!GROQ_KEY) {
-    if (!promptForKey()) {
-      chat.innerHTML += `<p class="sys"><b>Scholar:</b> You need a free Groq key to chat. <a href="https://console.groq.com/keys" target="_blank" style="color:#6366f1;">Click here to get one</a></p>`;
-      return;
+    // Audio Context and Web Audio API Setup for Looping Quiet Storm Beat
+    let audioContext;
+    let isPlaying = false;
+    let masterGain;
+    let oscillators = [];
+    let kickSchedule = [];
+    let bassSchedule = [];
+    let animationFrame;
+    
+    // Initialize Web Audio
+    function initAudio() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            masterGain = audioContext.createGain();
+            masterGain.gain.value = 0.7;
+            masterGain.connect(audioContext.destination);
+        }
     }
-  }
-  chat.innerHTML += `<p class="you"><b>You:</b> ${q}</p>`;
-  document.getElementById('q').value="";
-  chat.scrollTop = chat.scrollHeight;
-  try {
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions",{
-      method:"POST",
-      headers:{"Authorization":"Bearer "+GROQ_KEY,"Content-Type":"application/json"},
-      body:JSON.stringify({model:"llama-3.1-8b-instant",messages:[{role:"user",content:q}],temperature:0.7})
+    
+    // Create looping soft funk instrumental using oscillators
+    function createSoftFunkLoop() {
+        const now = audioContext.currentTime;
+        const tempo = 82; // BPM for quiet storm
+        const beatDuration = 60 / tempo;
+        const loopLength = beatDuration * 8; // 8 beat loop
+        
+        // Bass line - smooth funk pattern
+        const bassNotes = [55, 55, 65.41, 73.42, 65.41, 55, 49, 55]; // A1, A1, C2, D2, C2, A1, G1, A1
+        bassNotes.forEach((freq, i) => {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
+            
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            
+            filter.type = 'lowpass';
+            filter.frequency.value = 400;
+            filter.Q.value = 1;
+            
+            gain.gain.setValueAtTime(0, now + i * beatDuration);
+            gain.gain.linearRampToValueAtTime(0.3, now + i * beatDuration + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + (i + 1) * beatDuration);
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(masterGain);
+            
+            osc.start(now + i * beatDuration);
+            osc.stop(now + (i + 1) * beatDuration);
+            oscillators.push(osc);
+        });
+        
+        // Kick drum - soft and deep
+        for (let i = 0; i < 8; i += 2) {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(60, now + i * beatDuration);
+            osc.frequency.exponentialRampToValueAtTime(40, now + i * beatDuration + 0.1);
+            
+            gain.gain.setValueAtTime(0.5, now + i * beatDuration);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + i * beatDuration + 0.3);
+            
+            osc.connect(gain);
+            gain.connect(masterGain);
+            
+            osc.start(now + i * beatDuration);
+            osc.stop(now + i * beatDuration + 0.3);
+            oscillators.push(osc);
+        }
+        
+        // Hi-hat - soft shakers
+        for (let i = 0.5; i < 8; i += 0.5) {
+            const noise = audioContext.createBufferSource();
+            const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.1, audioContext.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let j = 0; j < data.length; j++) {
+                data[j] = Math.random() * 2 - 1;
+            }
+            noise.buffer = buffer;
+            
+            const filter = audioContext.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.value = 7000;
+            
+            const gain = audioContext.createGain();
+            gain.gain.setValueAtTime(0.1, now + i * beatDuration);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + i * beatDuration + 0.05);
+            
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(masterGain);
+            
+            noise.start(now + i * beatDuration);
+            oscillators.push(noise);
+        }
+        
+        // Rhodes-style chords - lush and warm
+        const chordFreqs = [
+            [220, 277.18, 329.63, 392], // A minor 7
+            [220, 277.18, 329.63, 392],
+            [196, 246.94, 293.66, 349.23], // G major 7
+            [196, 246.94, 293.66, 349.23],
+        ];
+        
+        chordFreqs.forEach((chord, chordIndex) => {
+            chord.forEach(freq => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
+                
+                filter.type = 'lowpass';
+                filter.frequency.value = 2000;
+                filter.Q.value = 2;
+                
+                const startTime = now + chordIndex * beatDuration * 2;
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.08, startTime + 0.1);
+                gain.gain.setValueAtTime(0.06, startTime + beatDuration);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + beatDuration * 1.8);
+                
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(masterGain);
+                
+                osc.start(startTime);
+                osc.stop(startTime + beatDuration * 2);
+                oscillators.push(osc);
+            });
+        });
+        
+        // Schedule next loop
+        const nextLoop = setTimeout(() => {
+            if (isPlaying) createSoftFunkLoop();
+        }, (loopLength - 0.1) * 1000);
+        
+        oscillators.push({ stop: () => clearTimeout(nextLoop) });
+    }
+    
+    function stopAllSounds() {
+        oscillators.forEach(osc => {
+            try {
+                if (osc.stop) osc.stop();
+            } catch(e) {}
+        });
+        oscillators = [];
+    }
+    
+    // Visualizer
+    function createVisualizer() {
+        const visualizer = document.getElementById('visualizer');
+        visualizer.innerHTML = '';
+        for (let i = 0; i < 40; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'visualizer-bar';
+            visualizer.appendChild(bar);
+        }
+    }
+    
+    function animateVisualizer() {
+        if (!isPlaying) return;
+        
+        const bars = document.querySelectorAll('.visualizer-bar');
+        bars.forEach(bar => {
+            const height = Math.random() * 60 + 5;
+            bar.style.height = height + 'px';
+            bar.classList.add('active');
+        });
+        
+        animationFrame = requestAnimationFrame(() => {
+            setTimeout(animateVisualizer, 100);
+        });
+    }
+    
+    function stopVisualizer() {
+        const bars = document.querySelectorAll('.visualizer-bar');
+        bars.forEach(bar => {
+            bar.style.height = '5px';
+            bar.classList.remove('active');
+        });
+        if (animationFrame) cancelAnimationFrame(animationFrame);
+    }
+    
+    // Play/Pause Controls
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const mainListenBtn = document.getElementById('mainListenBtn');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const volumeSlider = document.getElementById('volumeSlider');
+    
+    function togglePlay() {
+        initAudio();
+        
+        if (!isPlaying) {
+            isPlaying = true;
+            audioContext.resume();
+            createSoftFunkLoop();
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+            mainListenBtn.classList.add('playing');
+            mainListenBtn.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                </svg>
+                PAUSE STREAM
+            `;
+            animateVisualizer();
+        } else {
+            isPlaying = false;
+            stopAllSounds();
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+            mainListenBtn.classList.remove('playing');
+            mainListenBtn.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                LISTEN LIVE
+            `;
+            stopVisualizer();
+        }
+    }
+    
+    playPauseBtn.addEventListener('click', togglePlay);
+    mainListenBtn.addEventListener('click', togglePlay);
+    
+    // Volume Control
+    volumeSlider.addEventListener('input', (e) => {
+        if (masterGain) {
+            masterGain.gain.value = e.target.value / 100;
+        }
     });
-    const data = await res.json();
-    if(data.error) throw new Error(data.error.message);
-    const reply = data.choices[0].message.content;
-    chat.innerHTML += `<p class="scholar"><b>Scholar:</b> ${reply}</p>`;
-  } catch(e) {
-    chat.innerHTML += `<p class="scholar"><b>Scholar:</b> Error: ${e.message}. Check your key at console.groq.com</p>`;
-    GROQ_KEY = '';
-    localStorage.removeItem('scholar_groq');
-  }
-  chat.scrollTop = chat.scrollHeight;
-}
+    
+    // Navigation
+    const navLinks = document.querySelectorAll('.nav-link');
+    const pages = document.querySelectorAll('.page');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navLinksContainer = document.getElementById('navLinks');
+    
+    function showPage(pageId) {
+        pages.forEach(page => page.classList.remove('active'));
+        navLinks.forEach(link => link.classList.remove('active'));
+        
+        document.getElementById(pageId).classList.add('active');
+        document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        navLinksContainer.classList.remove('active');
+    }
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageId = link.getAttribute('data-page');
+            showPage(pageId);
+        });
+    });
+    
+    // Footer links
+    document.querySelectorAll('footer a[data-page]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageId = link.getAttribute('data-page');
+            showPage(pageId);
+        });
+    });
+    
+    // Mobile Menu
+    mobileMenuBtn.addEventListener('click', () => {
+        navLinksContainer.classList.toggle('active');
+    });
+    
+    // Close mobile menu on outside click
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('nav')) {
+            navLinksContainer.classList.remove('active');
+        }
+    });
+    
+    // Initialize
+    createVisualizer();
+    
+    // Handle page visibility
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden && isPlaying) {
+            // Keep playing in background
+        }
+    });
 </script>
 </body>
 </html>
