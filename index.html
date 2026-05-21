@@ -1,145 +1,1181 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>King Richard Radio</title>
-  <style>
-    body { font-family: system-ui, sans-serif; background: #0a0a0a; color: #fff; margin: 0; padding: 20px; }
-  .container { max-width: 900px; margin: 0 auto; }
-  .box { background: #1a1a1a; border: 2px solid #ff3366; border-radius: 12px; padding: 25px; margin: 20px 0; }
-  .agent-box { border-color: #3366ff; }
-  .music-box { border-color: #33ff66; }
-    h1 { color: #ff3366; text-align: center; margin: 0 0 10px 0; }
-    h2 { font-size: 18px; margin: 0 0 15px 0; }
-  .listeners { color: #ff3366; font-size: 14px; text-align: center; margin: 10px 0; }
-  .status { color: #888; font-size: 12px; text-align: center; margin: 5px 0; }
-    audio { width: 100%; margin: 15px 0; }
-    #chatLog { background: #0a0a0a; border: 1px solid #333; border-radius: 6px; padding: 15px; height: 250px; overflow-y: auto; margin-bottom: 15px; text-align: left; }
-  .msg { margin: 8px 0; font-size: 14px; }
-  .user { color: #33ff66; }
-  .bot { color: #ccc; }
-  .error { color: #ff3366; }
-  .system { color: #3366ff; }
-  .input-row { display: flex; gap: 10px; }
-    input[type="text"] { flex: 1; padding: 12px; background: #0a0a0a; border: 1px solid #444; color: #fff; border-radius: 6px; }
-    button { padding: 12px 24px; background: #3366ff; border: none; color: #fff; border-radius: 6px; cursor: pointer; }
-  .disclaimer { color: #888; font-size: 11px; text-align: center; margin-bottom: 20px; }
-  .upload-area { border: 2px dashed #444; border-radius: 8px; padding: 40px; text-align: center; margin: 20px 0; }
-  </style>
+<!-- saved from url=(0052)https://richardjhnsn6-beep.github.io/rjhnsn12-radio/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local + Free Music Player</title>
+<style>
+    :root {
+        --bg: #0a0a0a;
+        --bg-secondary: #121212;
+        --bg-tertiary: #1a1a1a;
+        --accent: #1db954;
+        --accent-hover: #1ed760;
+        --text: #ffffff;
+        --text-secondary: #b3b3b3;
+        --border: #282828;
+        --danger: #e22134;
+        --shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+    .disclaimer {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+        border-bottom: 1px solid var(--border);
+        padding: 12px 20px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+    }
+
+    .disclaimer strong {
+        color: var(--accent);
+    }
+
+    header {
+        background: var(--bg-secondary);
+        padding: 20px;
+        border-bottom: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .logo-icon {
+        width: 32px;
+        height: 32px;
+        background: var(--accent);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tabs {
+        display: flex;
+        gap: 8px;
+        background: var(--bg-tertiary);
+        padding: 4px;
+        border-radius: 8px;
+    }
+
+    .tab {
+        padding: 10px 20px;
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .tab:hover {
+        color: var(--text);
+        background: rgba(255,255,255,0.05);
+    }
+
+    .tab.active {
+        background: var(--accent);
+        color: #000;
+    }
+
+    main {
+        flex: 1;
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 30px 20px 120px;
+    }
+
+    .tab-content {
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .upload-zone {
+        border: 2px dashed var(--border);
+        border-radius: 16px;
+        padding: 60px 20px;
+        text-align: center;
+        background: var(--bg-secondary);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        margin-bottom: 30px;
+    }
+
+    .upload-zone:hover, .upload-zone.dragging {
+        border-color: var(--accent);
+        background: var(--bg-tertiary);
+        transform: scale(1.01);
+    }
+
+    .upload-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 20px;
+        background: var(--bg-tertiary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .upload-zone h3 {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .upload-zone p {
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        background: var(--accent);
+        color: #000;
+        border: none;
+        border-radius: 24px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn:hover {
+        background: var(--accent-hover);
+        transform: scale(1.05);
+    }
+
+    .btn-secondary {
+        background: var(--bg-tertiary);
+        color: var(--text);
+    }
+
+    .btn-secondary:hover {
+        background: #2a2a2a;
+    }
+
+    .btn-small {
+        padding: 6px 14px;
+        font-size: 13px;
+        border-radius: 16px;
+    }
+
+    .btn-icon {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        border-radius: 50%;
+        justify-content: center;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .search-bar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 14px 20px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        color: var(--text);
+        font-size: 15px;
+        transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.1);
+    }
+
+    .playlist {
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+
+    .playlist-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .playlist-header h3 {
+        font-size: 18px;
+    }
+
+    .track-list {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .track-list::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .track-list::-webkit-scrollbar-track {
+        background: var(--bg-tertiary);
+    }
+
+    .track-list::-webkit-scrollbar-thumb {
+        background: #404040;
+        border-radius: 4px;
+    }
+
+    .track-item {
+        display: grid;
+        grid-template-columns: 40px 1fr auto;
+        gap: 16px;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--border);
+        align-items: center;
+        transition: background 0.2s ease;
+        cursor: pointer;
+    }
+
+    .track-item:hover {
+        background: var(--bg-tertiary);
+    }
+
+    .track-item.playing {
+        background: rgba(29, 185, 84, 0.1);
+    }
+
+    .track-item.playing .track-number {
+        color: var(--accent);
+    }
+
+    .track-number {
+        color: var(--text-secondary);
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .track-info {
+        min-width: 0;
+    }
+
+    .track-title {
+        font-size: 15px;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .track-meta {
+        font-size: 13px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .track-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .empty-state {
+        padding: 60px 20px;
+        text-align: center;
+        color: var(--text-secondary);
+    }
+
+    .player-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--bg-secondary);
+        border-top: 1px solid var(--border);
+        padding: 16px 20px;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+        z-index: 200;
+    }
+
+    .player-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .now-playing {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+
+    .now-playing-art {
+        width: 56px;
+        height: 56px;
+        background: var(--bg-tertiary);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .now-playing-info {
+        min-width: 0;
+    }
+
+    .now-playing-title {
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .now-playing-artist {
+        font-size: 12px;
+        color: var(--text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .player-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .control-buttons {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .control-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .control-btn:hover {
+        color: var(--text);
+        background: rgba(255,255,255,0.1);
+    }
+
+    .control-btn.active {
+        color: var(--accent);
+    }
+
+    .play-btn {
+        width: 44px;
+        height: 44px;
+        background: var(--text);
+        color: #000;
+    }
+
+    .play-btn:hover {
+        background: var(--text);
+        transform: scale(1.1);
+    }
+
+    .progress-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .time {
+        font-size: 12px;
+        color: var(--text-secondary);
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .progress-bar {
+        flex: 1;
+        height: 4px;
+        background: var(--bg-tertiary);
+        border-radius: 2px;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: var(--accent);
+        border-radius: 2px;
+        width: 0%;
+        transition: width 0.1s linear;
+    }
+
+    .progress-bar:hover .progress-fill {
+        background: var(--accent-hover);
+    }
+
+    .player-extra {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+
+    .volume-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .volume-slider {
+        width: 100px;
+        height: 4px;
+        background: var(--bg-tertiary);
+        border-radius: 2px;
+        outline: none;
+        appearance: none;
+        cursor: pointer;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 12px;
+        height: 12px;
+        background: var(--text);
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .loading {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        background: var(--bg-tertiary);
+        border-radius: 4px;
+        font-size: 11px;
+        color: var(--text-secondary);
+    }
+
+    .cors-notice {
+        background: rgba(226, 33, 52, 0.1);
+        border: 1px solid rgba(226, 33, 52, 0.3);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+        .header-content {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .tabs {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .player-content {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .now-playing {
+            order: 1;
+        }
+
+        .player-controls {
+            order: 2;
+        }
+
+        .player-extra {
+            order: 3;
+            justify-content: center;
+        }
+
+        .track-item {
+            grid-template-columns: 30px 1fr auto;
+            gap: 12px;
+        }
+
+        .track-actions {
+            flex-direction: column;
+        }
+
+        .volume-slider {
+            width: 60px;
+        }
+
+        .progress-container {
+            max-width: 100%;
+        }
+    }
+</style>
 </head>
 <body>
-  <div class="container">
     <div class="disclaimer">
-      Disclaimer: Downloads are from Free Music Archive. Only royalty-free tracks that artists have made available for free. This player does not support Spotify/YouTube/Apple Music streaming due to licensing.
+        <strong>Disclaimer:</strong> Downloads are from Free Music Archive. Only royalty-free tracks that artists have made available for free. This player does not support Spotify/YouTube/Apple Music streaming due to licensing.
     </div>
 
-    <!-- KING RICHARD RADIO -->
-    <div class="box">
-      <h1>King Richard</h1>
-      <div class="listeners">1,240 listeners live</div>
-      <div class="status" id="radioStatus">Set stream URL in config</div>
-      <audio controls autoplay id="radioPlayer">
-        <source id="radioSource" src="" type="audio/mpeg">
-      </audio>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
+                </div>
+                <span>MusicPlayer</span>
+            </div>
+            <div class="tabs">
+                <button class="tab active" data-tab="myfiles">My Files</button>
+                <button class="tab" data-tab="freemusic">Free Music Online</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="tab-content active" id="myfiles">
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </div>
+                <h3>Drag &amp; drop audio files here</h3>
+                <p>or click to browse. Supports MP3, WAV, FLAC, M4A</p>
+                <input type="file" id="fileInput" accept=".mp3,.wav,.flac,.m4a,audio/*" multiple="">
+            </div>
+
+            <div class="playlist">
+                <div class="playlist-header">
+                    <h3>Your Playlist</h3>
+                    <button class="btn btn-secondary btn-small" id="clearPlaylist">Clear All</button>
+                </div>
+                <div class="track-list" id="localPlaylist">
+                <div class="track-item playing" data-index="0">
+                    <div class="track-number">▶</div>
+                    <div class="track-info">
+                        <div class="track-title">Moavii - Try Me (freetouse.com)</div>
+                        <div class="track-meta">Local File • 5.06 MB • 2:12</div>
+                    </div>
+                    <div class="track-actions">
+                        <button class="btn btn-secondary btn-small" onclick="removeTrack(0)">Remove</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="freemusic">
+            <div class="cors-notice">
+                <strong>Note:</strong> Free Music Archive's public API may have CORS restrictions. If search doesn't work, this is a browser security limitation. Tracks are still legal to download directly from freemusicarchive.org.
+            </div>
+            <div class="search-bar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search for free music (e.g. jazz, electronic, ambient)">
+                <button class="btn" id="searchBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    Search
+                </button>
+            </div>
+
+            <div class="playlist">
+                <div class="playlist-header">
+                    <h3>Search Results</h3>
+                </div>
+                <div class="track-list" id="searchResults">
+                    <div class="empty-state">Search for royalty-free music to stream or download</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="player-bar">
+        <div class="player-content">
+            <div class="now-playing">
+                <div class="now-playing-art">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
+                </div>
+                <div class="now-playing-info">
+                    <div class="now-playing-title" id="nowPlayingTitle">Moavii - Try Me (freetouse.com)</div>
+                    <div class="now-playing-artist" id="nowPlayingArtist">Local File</div>
+                </div>
+            </div>
+
+            <div class="player-controls">
+                <div class="control-buttons">
+                    <button class="control-btn" id="shuffleBtn" title="Shuffle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16 3 21 3 21 8"></polyline>
+                            <line x1="4" y1="20" x2="21" y2="3"></line>
+                            <polyline points="21 16 21 21 16 21"></polyline>
+                            <line x1="15" y1="15" x2="21" y2="21"></line>
+                            <line x1="4" y1="4" x2="9" y2="9"></line>
+                        </svg>
+                    </button>
+                    <button class="control-btn" id="prevBtn" title="Previous">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                            <line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"></line>
+                        </svg>
+                    </button>
+                    <button class="control-btn play-btn" id="playBtn" title="Play"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></button>
+                    <button class="control-btn" id="nextBtn" title="Next">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                            <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"></line>
+                        </svg>
+                    </button>
+                    <button class="control-btn" id="repeatBtn" title="Repeat">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="17 1 21 5 17 9"></polyline>
+                            <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                            <polyline points="7 23 3 19 7 15"></polyline>
+                            <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="progress-container">
+                    <span class="time" id="currentTime">0:26</span>
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-fill" id="progressFill" style="width: 19.9665%;"></div>
+                    </div>
+                    <span class="time" id="duration">2:12</span>
+                </div>
+            </div>
+
+            <div class="player-extra">
+                <div class="volume-container">
+                    <button class="control-btn" id="volumeBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></button>
+                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- GROQ 3.3 AGENT -->
-    <div class="box agent-box">
-      <h2 style="color: #3366ff;">Scholar Offline - Powered by Groq Llama 3.3</h2>
-      <div id="chatLog"></div>
-      <div class="input-row">
-        <input type="text" id="userInput" placeholder="Ask Scholar anything...">
-        <button onclick="sendMessage()">Send</button>
-      </div>
-    </div>
+    <audio id="audioPlayer" src="blob:https://richardjhnsn6-beep.github.io/9cfa47c8-2e38-435d-8611-aa727dba2464"></audio>
 
-    <!-- YOUR MUSIC PLAYER - GREEN ONE -->
-    <div class="box music-box">
-      <h2 style="color: #33ff66;">🎵 MusicPlayer</h2>
-      <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-        <button style="background: #33ff66; color: #000;">My Files</button>
-        <button style="background: transparent; border: 1px solid #444; color: #ccc;">Free Music Online</button>
-      </div>
-      <div class="upload-area">
-        <div style="font-size: 24px;">⬆️</div>
-        <p><strong>Drag & drop audio files here</strong></p>
-        <p style="color: #888; font-size: 13px;">or click to browse. Supports MP3, WAV, FLAC, M4A</p>
-      </div>
-      <h3>Your Playlist</h3>
-      <div style="background: #33ff66; color: #000; padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-        <span>▶ Moavii - Try Me (freetouse.com)<br><small>Local File • 5.06 MB • 2:12</small></span>
-        <button style="background: #000; color: #33ff66; padding: 6px 12px; width: auto;">Remove</button>
-      </div>
-    </div>
-  </div>
+    <script>
+        // State
+        const state = {
+            playlist: [],
+            currentIndex: -1,
+            isPlaying: false,
+            shuffle: false,
+            repeat: false,
+            volume: 0.7,
+            searchCache: []
+        };
 
-  <script>
-    // CONFIG - RADIO ONLY. NO GROQ KEY HERE.
-    const RADIO_STREAM_URL = 'REPLACE_WITH_YOUR_RADIO_STREAM_URL';
+        // Elements
+        const audio = document.getElementById('audioPlayer');
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const localPlaylist = document.getElementById('localPlaylist');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchResults = document.getElementById('searchResults');
+        const playBtn = document.getElementById('playBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const repeatBtn = document.getElementById('repeatBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeBtn = document.getElementById('volumeBtn');
+        const nowPlayingTitle = document.getElementById('nowPlayingTitle');
+        const nowPlayingArtist = document.getElementById('nowPlayingArtist');
+        const clearPlaylistBtn = document.getElementById('clearPlaylist');
 
-    // RADIO PLAYER SETUP
-    const radioPlayer = document.getElementById('radioPlayer');
-    const radioSource = document.getElementById('radioSource');
-    const radioStatus = document.getElementById('radioStatus');
-
-    if (RADIO_STREAM_URL &&!RADIO_STREAM_URL.includes('REPLACE')) {
-      radioSource.src = RADIO_STREAM_URL;
-      radioPlayer.load();
-      radioStatus.textContent = 'Connecting to stream...';
-      radioPlayer.addEventListener('playing', () => radioStatus.textContent = 'Live');
-      radioPlayer.addEventListener('error', () => {
-        radioStatus.textContent = 'Error: Stream blocked or invalid URL';
-        radioStatus.style.color = '#ff3366';
-      });
-    } else {
-      radioStatus.textContent = 'ERROR: Paste radio stream URL in code';
-      radioStatus.style.color = '#ff3366';
-    }
-
-    // GROQ AGENT - CALLS YOUR BACKEND, NOT GROQ DIRECTLY
-    const chatLog = document.getElementById('chatLog');
-    const userInput = document.getElementById('userInput');
-
-    function addMsg(text, who) {
-      const div = document.createElement('div');
-      div.className = 'msg ' + who;
-      div.textContent = (who === 'user'? 'You: ' : who === 'system'? '' : 'Scholar: ') + text;
-      chatLog.appendChild(div);
-      chatLog.scrollTop = chatLog.scrollHeight;
-    }
-
-    async function sendMessage() {
-      const msg = userInput.value.trim();
-      if (!msg) return;
-      addMsg(msg, 'user');
-      userInput.value = '';
-      addMsg('Thinking...', 'bot');
-
-      try {
-        // This calls YOUR Netlify function, not Groq. Key is hidden on server.
-        const res = await fetch('/.netlify/functions/groq', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: msg })
+        // Tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
         });
-        const data = await res.json();
-        chatLog.removeChild(chatLog.lastChild);
-        if (data.reply) {
-          addMsg(data.reply, 'bot');
-        } else {
-          addMsg('Error: ' + (data.error || 'Server error'), 'error');
-        }
-      } catch (e) {
-        chatLog.removeChild(chatLog.lastChild);
-        addMsg('Connection error. Check Netlify function.', 'error');
-      }
-    }
 
-    userInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') sendMessage();
-    });
-    addMsg('Agent ready. Backend handles Groq key.', 'system');
-  </script>
-</body>
-</html>
+        // Upload handling
+        uploadZone.addEventListener('click', () => fileInput.click());
+        uploadZone.addEventListener('dragover', e => {
+            e.preventDefault();
+            uploadZone.classList.add('dragging');
+        });
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragging');
+        });
+        uploadZone.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragging');
+            handleFiles(e.dataTransfer.files);
+        });
+        fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('audio/')) return;
+                const url = URL.createObjectURL(file);
+                const track = {
+                    id: Date.now() + Math.random(),
+                    title: file.name.replace(/\.[^/.]+$/, ''),
+                    artist: 'Local File',
+                    size: formatFileSize(file.size),
+                    url: url,
+                    type: 'local',
+                    file: file,
+                    duration: 0
+                };
+                state.playlist.push(track);
+            });
+            renderPlaylist();
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        function renderPlaylist() {
+            if (state.playlist.length === 0) {
+                localPlaylist.innerHTML = '<div class="empty-state">No tracks yet. Upload some music to get started!</div>';
+                return;
+            }
+            localPlaylist.innerHTML = state.playlist.map((track, i) => `
+                <div class="track-item ${i === state.currentIndex ? 'playing' : ''}" data-index="${i}">
+                    <div class="track-number">${i === state.currentIndex && state.isPlaying ? '▶' : i + 1}</div>
+                    <div class="track-info">
+                        <div class="track-title">${escapeHtml(track.title)}</div>
+                        <div class="track-meta">${escapeHtml(track.artist)} • ${track.size} ${track.duration ? '• ' + formatTime(track.duration) : ''}</div>
+                    </div>
+                    <div class="track-actions">
+                        <button class="btn btn-secondary btn-small" onclick="removeTrack(${i})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.track-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (!e.target.closest('button')) {
+                        playTrack(parseInt(item.dataset.index));
+                    }
+                });
+            });
+        }
+
+        window.removeTrack = function(index) {
+            URL.revokeObjectURL(state.playlist[index].url);
+            state.playlist.splice(index, 1);
+            if (state.currentIndex === index) {
+                audio.pause();
+                state.isPlaying = false;
+                state.currentIndex = -1;
+                updatePlayButton();
+            } else if (state.currentIndex > index) {
+                state.currentIndex--;
+            }
+            renderPlaylist();
+        };
+
+        clearPlaylistBtn.addEventListener('click', () => {
+            if (confirm('Clear entire playlist?')) {
+                state.playlist.forEach(track => {
+                    if (track.type === 'local') URL.revokeObjectURL(track.url);
+                });
+                state.playlist = [];
+                state.currentIndex = -1;
+                audio.pause();
+                state.isPlaying = false;
+                updatePlayButton();
+                renderPlaylist();
+                updateNowPlaying();
+            }
+        });
+
+        // Search Free Music Archive
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') performSearch();
+        });
+
+        async function performSearch() {
+            const query = searchInput.value.trim();
+            if (!query) return;
+
+            searchResults.innerHTML = '<div class="empty-state"><span class="loading"></span> Searching...</div>';
+            
+            // FMA API endpoint - note: may have CORS issues
+            const apiUrl = `https://freemusicarchive.org/api/trackSearch?q=${encodeURIComponent(query)}&limit=20`;
+            
+            try {
+                const response = await fetch(apiUrl, { mode: 'cors' });
+                if (!response.ok) throw new Error('API request failed');
+                
+                const data = await response.json();
+                state.searchCache = data.aResults || [];
+                renderSearchResults();
+            } catch (err) {
+                console.error('Search error:', err);
+                searchResults.innerHTML = `
+                    <div class="empty-state">
+                        <p>Unable to fetch results. This is likely due to CORS restrictions.</p>
+                        <p style="margin-top: 12px; font-size: 13px;">Visit <a href="https://freemusicarchive.org" target="_blank" style="color: var(--accent);">freemusicarchive.org</a> to browse and download tracks legally.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderSearchResults() {
+            if (state.searchCache.length === 0) {
+                searchResults.innerHTML = '<div class="empty-state">No results found. Try a different search term.</div>';
+                return;
+            }
+
+            searchResults.innerHTML = state.searchCache.map((track, i) => `
+                <div class="track-item">
+                    <div class="track-number">${i + 1}</div>
+                    <div class="track-info">
+                        <div class="track-title">${escapeHtml(track.track_title)}</div>
+                        <div class="track-meta">${escapeHtml(track.artist_name)} • ${escapeHtml(track.track_genres)} • ${formatTime(track.track_duration)}</div>
+                    </div>
+                    <div class="track-actions">
+                        <button class="btn btn-small" onclick="streamFMA(${i})">Play</button>
+                        <button class="btn btn-secondary btn-small" onclick="downloadFMA(${i})">Download</button>
+                        <button class="btn btn-secondary btn-small" onclick="addToPlaylist(${i})">+ Playlist</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.streamFMA = function(index) {
+            const track = state.searchCache[index];
+            const streamUrl = `https://files.freemusicarchive.org/${track.track_file}`;
+            const musicTrack = {
+                id: Date.now() + Math.random(),
+                title: track.track_title,
+                artist: track.artist_name,
+                url: streamUrl,
+                type: 'remote',
+                duration: parseInt(track.track_duration)
+            };
+            state.playlist.push(musicTrack);
+            playTrack(state.playlist.length - 1);
+            document.querySelector('[data-tab="myfiles"]').click();
+        };
+
+        window.downloadFMA = function(index) {
+            const track = state.searchCache[index];
+            const downloadUrl = `https://files.freemusicarchive.org/${track.track_file}`;
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = `${track.artist_name} - ${track.track_title}.mp3`;
+            a.click();
+        };
+
+        window.addToPlaylist = function(index) {
+            const track = state.searchCache[index];
+            const musicTrack = {
+                id: Date.now() + Math.random(),
+                title: track.track_title,
+                artist: track.artist_name,
+                url: `https://files.freemusicarchive.org/${track.track_file}`,
+                type: 'remote',
+                size: 'Stream',
+                duration: parseInt(track.track_duration)
+            };
+            state.playlist.push(musicTrack);
+            renderPlaylist();
+            alert(`Added "${track.track_title}" to playlist`);
+        };
+
+        // Player controls
+        function playTrack(index) {
+            if (index < 0 || index >= state.playlist.length) return;
+            
+            state.currentIndex = index;
+            const track = state.playlist[index];
+            audio.src = track.url;
+            audio.play();
+            state.isPlaying = true;
+            updatePlayButton();
+            updateNowPlaying();
+            renderPlaylist();
+        }
+
+        function togglePlay() {
+            if (state.playlist.length === 0) return;
+            if (state.currentIndex === -1) {
+                playTrack(0);
+                return;
+            }
+            if (state.isPlaying) {
+                audio.pause();
+            } else {
+                audio.play();
+            }
+        }
+
+        function nextTrack() {
+            if (state.playlist.length === 0) return;
+            if (state.shuffle) {
+                state.currentIndex = Math.floor(Math.random() * state.playlist.length);
+            } else {
+                state.currentIndex = (state.currentIndex + 1) % state.playlist.length;
+            }
+            playTrack(state.currentIndex);
+        }
+
+        function prevTrack() {
+            if (state.playlist.length === 0) return;
+            if (audio.currentTime > 3) {
+                audio.currentTime = 0;
+                return;
+            }
+            state.currentIndex = (state.currentIndex - 1 + state.playlist.length) % state.playlist.length;
+            playTrack(state.currentIndex);
+        }
+
+        function updatePlayButton() {
+            playBtn.innerHTML = state.isPlaying 
+                ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'
+                : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+        }
+
+        function updateNowPlaying() {
+            if (state.currentIndex === -1) {
+                nowPlayingTitle.textContent = 'No track selected';
+                nowPlayingArtist.textContent = '-';
+                return;
+            }
+            const track = state.playlist[state.currentIndex];
+            nowPlayingTitle.textContent = track.title;
+            nowPlayingArtist.textContent = track.artist;
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Event listeners
+        playBtn.addEventListener('click', togglePlay);
+        prevBtn.addEventListener('click', prevTrack);
+        nextBtn.addEventListener('click', nextTrack);
+
+        shuffleBtn.addEventListener('click', () => {
+            state.shuffle = !state.shuffle;
+            shuffleBtn.classList.toggle('active', state.shuffle);
+        });
+
+        repeatBtn.addEventListener('click', () => {
+            state.repeat = !state.repeat;
+            repeatBtn.classList.toggle('active', state.repeat);
+            audio.loop = state.repeat;
+        });
+
+        audio.addEventListener('play', () => {
+            state.isPlaying = true;
+            updatePlayButton();
+        });
+
+        audio.addEventListener('pause', () => {
+            state.isPlaying = false;
+            updatePlayButton();
+        });
+
+        audio.addEventListener('ended', () => {
+            if (state.repeat) {
+                audio.play();
+            } else {
+                nextTrack();
+            }
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                progressFill.style.width = percent + '%';
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+                durationEl.textContent = formatTime(audio.duration);
+            }
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+            if (state.currentIndex >= 0 && state.playlist[state.currentIndex]) {
+                state.playlist[state.currentIndex].duration = Math.floor(audio.duration);
+                renderPlaylist();
+            }
+        });
+
+        progressBar.addEventListener('click', e => {
+            if (!audio.duration) return;
+            const rect = progressBar.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = percent * audio.duration;
+        });
+
+        volumeSlider.addEventListener('input', e => {
+            state.volume = e.target.value / 100;
+            audio.volume = state.volume;
+            updateVolumeIcon();
+        });
+
+        volumeBtn.addEventListener('click', () => {
+            if (audio.volume > 0) {
+                audio.volume = 0;
+                volumeSlider.value = 0;
+            } else {
+                audio.volume = state.volume;
+                volumeSlider.value = state.volume * 100;
+            }
+            updateVolumeIcon();
+        });
+
+        function updateVolumeIcon() {
+            if (audio.volume === 0) {
+                volumeBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>';
+            } else if (audio.volume < 0.5) {
+                volumeBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>';
+            } else {
+                volumeBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>';
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', e => {
+            if (e.target.tagName === 'INPUT') return;
+            switch(e.code) {
+                case 'Space':
+                    e.preventDefault();
+                    togglePlay();
+                    break;
+                case 'ArrowRight':
+                    nextTrack();
+                    break;
+                case 'ArrowLeft':
+                    prevTrack();
+                    break;
+            }
+        });
+
+        // Init
+        audio.volume = state.volume;
+        updateVolumeIcon();
+    </script>
+
+
+</body></html>
