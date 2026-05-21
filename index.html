@@ -281,3 +281,629 @@
                                     <i class="fas fa-step-backward"></i>
                                 </button>
                                 <button id="playBtn" class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center text-white text-2xl hover-glow transition-all">
+                                    <i class="fas fa-play ml-1"></i>
+                                </button>
+                                <button id="nextBtn" class="text-3xl text-gray-300 hover:text-pink-400 transition-colors">
+                                    <i class="fas fa-step-forward"></i>
+                                </button>
+                                <button id="repeatBtn" class="text-2xl text-gray-400 hover:text-pink-400 transition-colors">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                            </div>
+
+                            <!-- Volume -->
+                            <div class="flex items-center gap-3 w-full max-w-xs">
+                                <i class="fas fa-volume-down text-gray-400"></i>
+                                <input type="range" id="volumeBar" class="progress-bar flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" value="70" min="0" max="100">
+                                <i class="fas fa-volume-up text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File Loader -->
+                    <div class="glass rounded-3xl p-6 mt-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <i class="fas fa-upload text-pink-500"></i>
+                            Load Your Music
+                        </h3>
+                        <label class="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-700 rounded-xl cursor-pointer hover:border-pink-500 transition-colors">
+                            <div class="text-center">
+                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-600 mb-2"></i>
+                                <p class="text-sm text-gray-400">Click to upload or drag files here</p>
+                                <p class="text-xs text-gray-600 mt-1">MP3, WAV, OGG supported</p>
+                            </div>
+                            <input type="file" id="fileInput" class="hidden" accept="audio/*" multiple>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Playlist -->
+                <div class="lg:col-span-1">
+                    <div class="glass rounded-3xl p-6 h-full">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold flex items-center gap-2">
+                                <i class="fas fa-list text-pink-500"></i>
+                                Playlist
+                            </h3>
+                            <span id="trackCount" class="text-sm text-gray-400">0 tracks</span>
+                        </div>
+                        <div id="playlist" class="space-y-2 max-h-[600px] overflow-y-auto pr-2">
+                            <div class="text-center py-20 text-gray-600">
+                                <i class="fas fa-music text-5xl mb-4"></i>
+                                <p>No tracks loaded</p>
+                                <p class="text-sm mt-2">Upload files to get started</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Podcast Page -->
+        <div id="podcast" class="page">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-5xl font-bold gradient-text mb-4">Quiet Storm Podcast</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Deep dives into the soul of R&B, exclusive interviews with legends, and stories behind the music that moves you</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Episode Cards -->
+                <div class="glass rounded-2xl overflow-hidden hover-glow transition-all">
+                    <div class="h-48 bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
+                        <i class="fas fa-microphone text-6xl text-white opacity-50"></i>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-pink-400 font-semibold">EPISODE 42</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2">The Evolution of Neo-Soul</h3>
+                        <p class="text-gray-400 text-sm mb-4">Exploring the roots and future of the neo-soul movement with special guests</p>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500">45 min</span>
+                            <button class="text-pink-500 hover:text-pink-400 font-medium">
+                                <i class="fas fa-play mr-1"></i> Play
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl overflow-hidden hover-glow transition-all">
+                    <div class="h-48 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                        <i class="fas fa-microphone text-6xl text-white opacity-50"></i>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-pink-400 font-semibold">EPISODE 41</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2">Jazz Legends Reimagined</h3>
+                        <p class="text-gray-400 text-sm mb-4">How modern artists are bringing classic jazz standards to new audiences</p>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500">52 min</span>
+                            <button class="text-pink-500 hover:text-pink-400 font-medium">
+                                <i class="fas fa-play mr-1"></i> Play
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl overflow-hidden hover-glow transition-all">
+                    <div class="h-48 bg-gradient-to-br from-pink-600 to-purple-500 flex items-center justify-center">
+                        <i class="fas fa-microphone text-6xl text-white opacity-50"></i>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-pink-400 font-semibold">EPISODE 40</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2">The Quiet Storm Story</h3>
+                        <p class="text-gray-400 text-sm mb-4">The origins of the radio format that changed late night forever</p>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500">38 min</span>
+                            <button class="text-pink-500 hover:text-pink-400 font-medium">
+                                <i class="fas fa-play mr-1"></i> Play
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shop Page -->
+        <div id="shop" class="page">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-5xl font-bold gradient-text mb-4">Quiet Storm Merch</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Exclusive apparel and accessories for true R&B, Soul & Jazz lovers</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="product-card glass rounded-2xl overflow-hidden transition-all duration-300 border border-transparent">
+                    <div class="h-64 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                        <i class="fas fa-tshirt text-7xl text-pink-500/30"></i>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-semibold mb-1">Classic Logo Tee</h3>
+                        <p class="text-sm text-gray-400 mb-3">Premium cotton, multiple colors</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold gradient-text">$29.99</span>
+                            <button class="gradient-bg px-4 py-2 rounded-lg text-sm font-medium hover-glow transition-all">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card glass rounded-2xl overflow-hidden transition-all duration-300 border border-transparent">
+                    <div class="h-64 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+                        <i class="fas fa-hat-cowboy text-7xl text-pink-500/30"></i>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-semibold mb-1">Vinyl Cap</h3>
+                        <p class="text-sm text-gray-400 mb-3">Snapback with embroidered logo</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold gradient-text">$24.99</span>
+                            <button class="gradient-bg px-4 py-2 rounded-lg text-sm font-medium hover-glow transition-all">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card glass rounded-2xl overflow-hidden transition-all duration-300 border border-transparent">
+                    <div class="h-64 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                        <i class="fas fa-mug-hot text-7xl text-pink-500/30"></i>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-semibold mb-1">Midnight Coffee Mug</h3>
+                        <p class="text-sm text-gray-400 mb-3">15oz ceramic, color changing</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold gradient-text">$18.99</span>
+                            <button class="gradient-bg px-4 py-2 rounded-lg text-sm font-medium hover-glow transition-all">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card glass rounded-2xl overflow-hidden transition-all duration-300 border border-transparent">
+                    <div class="h-64 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+                        <i class="fas fa-compact-disc text-7xl text-pink-500/30"></i>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-semibold mb-1">Vinyl Collection Vol.1</h3>
+                        <p class="text-sm text-gray-400 mb-3">Limited edition pressings</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold gradient-text">$49.99</span>
+                            <button class="gradient-bg px-4 py-2 rounded-lg text-sm font-medium hover-glow transition-all">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Amos Sample Page -->
+        <div id="amos" class="page">
+            <div class="glass rounded-3xl p-8 md:p-12">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="w-64 h-64 mx-auto md:mx-0 rounded-full gradient-bg p-2 glow-pink mb-8 md:mb-0">
+                            <div class="w-full h-full bg-gray-900 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user-music text-8xl text-pink-500/30"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-pink-400 font-semibold text-sm">FEATURED ARTIST</span>
+                        <h2 class="font-display text-5xl font-bold gradient-text mt-2 mb-6">Amos Sample</h2>
+                        <p class="text-gray-300 mb-4 leading-relaxed">
+                            Amos Sample is a multi-instrumentalist and producer bringing fresh energy to classic soul and jazz traditions. With over 15 years of experience, Amos has collaborated with Grammy-winning artists and performed at venues worldwide.
+                        </p>
+                        <p class="text-gray-400 mb-8 leading-relaxed">
+                            His latest project "Midnight Grooves" blends timeless R&B vocals with modern production, creating the perfect soundtrack for your quiet storm moments. Available exclusively on Quiet Storm Radio.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <button class="gradient-bg px-6 py-3 rounded-lg font-medium hover-glow transition-all">
+                                <i class="fas fa-play mr-2"></i> Listen Now
+                            </button>
+                            <button class="border-2 border-pink-500 text-pink-500 px-6 py-3 rounded-lg font-medium hover:bg-pink-500 hover:text-white transition-all">
+                                <i class="fab fa-spotify mr-2"></i> Follow
+                            </button>
+                        </div>
+                        
+                        <div class="mt-12 pt-8 border-t border-gray-800">
+                            <h3 class="font-semibold mb-4">Latest Releases</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-800/50 transition-colors cursor-pointer">
+                                    <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-music text-white"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="font-medium">Velvet Nights</p>
+                                        <p class="text-sm text-gray-500">2024 • Single</p>
+                                    </div>
+                                    <i class="fas fa-play text-pink-500"></i>
+                                </div>
+                                <div class="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-800/50 transition-colors cursor-pointer">
+                                    <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-music text-white"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="font-medium">Midnight Grooves</p>
+                                        <p class="text-sm text-gray-500">2023 • EP</p>
+                                    </div>
+                                    <i class="fas fa-play text-pink-500"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mini Player Fixed Bottom -->
+    <div id="miniPlayer" class="hidden fixed bottom-0 left-0 right-0 glass border-t border-gray-800 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-music text-white"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p id="miniTitle" class="font-medium text-sm truncate">No track playing</p>
+                        <p id="miniArtist" class="text-xs text-gray-500 truncate">Quiet Storm Radio</p>
+                    </div>
+                <div class="flex items-center gap-3">
+                    <button id="miniPrev" class="text-xl text-gray-400 hover:text-pink-400">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button id="miniPlay" class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center text-white hover-glow">
+                        <i class="fas fa-play ml-0.5"></i>
+                    </button>
+                    <button id="miniNext" class="text-xl text-gray-400 hover:text-pink-400">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="audioPlayer"></audio>
+
+    <script>
+        // State Management
+        const state = {
+            playlist: [],
+            currentTrackIndex: -1,
+            isPlaying: false,
+            shuffle: false,
+            repeat: false,
+            currentPage: 'radio'
+        };
+
+        // DOM Elements
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const repeatBtn = document.getElementById('repeatBtn');
+        const volumeBar = document.getElementById('volumeBar');
+        const progressBar = document.getElementById('progressBar');
+        const trackTitle = document.getElementById('trackTitle');
+        const trackArtist = document.getElementById('trackArtist');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const playlistEl = document.getElementById('playlist');
+        const trackCountEl = document.getElementById('trackCount');
+        const fileInput = document.getElementById('fileInput');
+        const vinyl = document.getElementById('vinyl');
+        const visualizer = document.getElementById('visualizer');
+        const liveStatus = document.getElementById('liveStatus');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const miniPlayer = document.getElementById('miniPlayer');
+        const miniPlay = document.getElementById('miniPlay');
+        const miniPrev = document.getElementById('miniPrev');
+        const miniNext = document.getElementById('miniNext');
+        const miniTitle = document.getElementById('miniTitle');
+        const miniArtist = document.getElementById('miniArtist');
+
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const page = link.dataset.page;
+                navigateToPage(page);
+            });
+        });
+
+        function navigateToPage(page) {
+            state.currentPage = page;
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page).classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                link.classList.add('text-gray-300');
+            });
+            
+            document.querySelectorAll(`.nav-link[data-page="${page}"]`).forEach(link => {
+                link.classList.add('active');
+                link.classList.remove('text-gray-300');
+            });
+            
+            mobileMenu.classList.add('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // File Upload
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                if (file.type.startsWith('audio/')) {
+                    const url = URL.createObjectURL(file);
+                    const track = {
+                        name: file.name.replace(/\.[^/.]+$/, ""),
+                        artist: 'Unknown Artist',
+                        url: url,
+                        file: file
+                    };
+                    state.playlist.push(track);
+                }
+            });
+            renderPlaylist();
+            if (state.currentTrackIndex === -1 && state.playlist.length > 0) {
+                loadTrack(0);
+            }
+        });
+
+        // Playlist Rendering
+        function renderPlaylist() {
+            if (state.playlist.length === 0) {
+                playlistEl.innerHTML = `
+                    <div class="text-center py-20 text-gray-600">
+                        <i class="fas fa-music text-5xl mb-4"></i>
+                        <p>No tracks loaded</p>
+                        <p class="text-sm mt-2">Upload files to get started</p>
+                    </div>
+                `;
+                trackCountEl.textContent = '0 tracks';
+                return;
+            }
+
+            trackCountEl.textContent = `${state.playlist.length} track${state.playlist.length !== 1 ? 's' : ''}`;
+            playlistEl.innerHTML = state.playlist.map((track, index) => `
+                <div class="track-item p-3 rounded-lg cursor-pointer transition-colors ${index === state.currentTrackIndex ? 'active' : ''}" data-index="${index}">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center flex-shrink-0">
+                            ${index === state.currentTrackIndex && state.isPlaying ? 
+                                '<i class="fas fa-pause text-white text-xs"></i>' : 
+                                '<i class="fas fa-play text-white text-xs ml-0.5"></i>'}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-sm truncate">${track.name}</p>
+                            <p class="text-xs text-gray-500 truncate">${track.artist}</p>
+                        </div>
+                        <button class="delete-track text-gray-600 hover:text-red-500 transition-colors" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add click listeners
+            document.querySelectorAll('.track-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (!e.target.closest('.delete-track')) {
+                        const index = parseInt(item.dataset.index);
+                        loadTrack(index);
+                        playTrack();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.delete-track').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const index = parseInt(btn.dataset.index);
+                    deleteTrack(index);
+                });
+            });
+        }
+
+        function deleteTrack(index) {
+            if (index === state.currentTrackIndex) {
+                audio.pause();
+                state.isPlaying = false;
+                if (state.playlist.length > 1) {
+                    nextTrack();
+                } else {
+                    state.currentTrackIndex = -1;
+                    trackTitle.textContent = 'Select a track to begin';
+                    trackArtist.textContent = '24/7 Smooth R&B, Soul & Jazz';
+                }
+            } else if (index < state.currentTrackIndex) {
+                state.currentTrackIndex--;
+            }
+            URL.revokeObjectURL(state.playlist[index].url);
+            state.playlist.splice(index, 1);
+            renderPlaylist();
+        }
+
+        // Player Controls
+        function loadTrack(index) {
+            if (index < 0 || index >= state.playlist.length) return;
+            
+            state.currentTrackIndex = index;
+            const track = state.playlist[index];
+            audio.src = track.url;
+            trackTitle.textContent = track.name;
+            trackArtist.textContent = track.artist;
+            miniTitle.textContent = track.name;
+            miniArtist.textContent = track.artist;
+            updatePlayButton();
+            renderPlaylist();
+        }
+
+        function playTrack() {
+            if (state.currentTrackIndex === -1) {
+                if (state.playlist.length > 0) {
+                    loadTrack(0);
+                } else {
+                    return;
+                }
+            }
+            
+            audio.play().then(() => {
+                state.isPlaying = true;
+                updatePlayButton();
+                vinyl.classList.add('vinyl-spin');
+                visualizer.style.display = 'flex';
+                liveStatus.textContent = 'LIVE';
+                miniPlayer.classList.remove('hidden');
+            }).catch(err => {
+                console.error('Playback failed:', err);
+            });
+        }
+
+        function pauseTrack() {
+            audio.pause();
+            state.isPlaying = false;
+            updatePlayButton();
+            vinyl.classList.remove('vinyl-spin');
+            visualizer.style.display = 'none';
+            liveStatus.textContent = 'PAUSED';
+        }
+
+        function togglePlay() {
+            if (state.isPlaying) {
+                pauseTrack();
+            } else {
+                playTrack();
+            }
+        }
+
+        function updatePlayButton() {
+            const icon = state.isPlaying ? 
+                '<i class="fas fa-pause"></i>' : 
+                '<i class="fas fa-play ml-1"></i>';
+            playBtn.innerHTML = icon;
+            miniPlay.innerHTML = state.isPlaying ? 
+                '<i class="fas fa-pause"></i>' : 
+                '<i class="fas fa-play ml-0.5"></i>';
+        }
+
+        function nextTrack() {
+            if (state.playlist.length === 0) return;
+            
+            let nextIndex;
+            if (state.shuffle) {
+                nextIndex = Math.floor(Math.random() * state.playlist.length);
+            } else {
+                nextIndex = (state.currentTrackIndex + 1) % state.playlist.length;
+            }
+            
+            loadTrack(nextIndex);
+            if (state.isPlaying) {
+                playTrack();
+            }
+        }
+
+        function prevTrack() {
+            if (state.playlist.length === 0) return;
+            
+            if (audio.currentTime > 3) {
+                audio.currentTime = 0;
+                return;
+            }
+            
+            let prevIndex;
+            if (state.shuffle) {
+                prevIndex = Math.floor(Math.random() * state.playlist.length);
+            } else {
+                prevIndex = state.currentTrackIndex - 1;
+                if (prevIndex < 0) prevIndex = state.playlist.length - 1;
+            }
+            
+            loadTrack(prevIndex);
+            if (state.isPlaying) {
+                playTrack();
+            }
+        }
+
+        // Event Listeners
+        playBtn.addEventListener('click', togglePlay);
+        miniPlay.addEventListener('click', togglePlay);
+        nextBtn.addEventListener('click', nextTrack);
+        miniNext.addEventListener('click', nextTrack);
+        prevBtn.addEventListener('click', prevTrack);
+        miniPrev.addEventListener('click', prevTrack);
+
+        shuffleBtn.addEventListener('click', () => {
+            state.shuffle = !state.shuffle;
+            shuffleBtn.style.color = state.shuffle ? '#ff1493' : '';
+        });
+
+        repeatBtn.addEventListener('click', () => {
+            state.repeat = !state.repeat;
+            repeatBtn.style.color = state.repeat ? '#ff1493' : '';
+            audio.loop = state.repeat;
+        });
+
+        volumeBar.addEventListener('input', (e) => {
+            audio.volume = e.target.value / 100;
+        });
+
+        progressBar.addEventListener('input', (e) => {
+            const time = (e.target.value / 100) * audio.duration;
+            audio.currentTime = time;
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = progress;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+                durationEl.textContent = formatTime(audio.duration);
+            }
+        });
+
+        audio.addEventListener('ended', () => {
+            if (!state.repeat) {
+                nextTrack();
+            }
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('play', () => {
+            state.isPlaying = true;
+            updatePlayButton();
+        });
+
+        audio.addEventListener('pause', () => {
+            state.isPlaying = false;
+            updatePlayButton();
+        });
+
+        // Utility Functions
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Initialize
+        audio.volume = 0.7;
+        
+        // Demo tracks for initial load
+        const demoTracks = [
+            { name: 'Midnight Soul Groove', artist: 'Quiet Storm Sessions', duration: '4:32' },
+            { name: 'Velvet Jazz Nights', artist: 'Amos Sample', duration: '5:18' },
+            { name: 'Smooth Operator', artist: 'Classic R&B Collective', duration: '4:56' },
+            { name: 'Eros Jazz Cafe', artist: 'Late Night Ensemble', duration: '6:02' },
+        ];
+    </script>
+</body>
+</html>
